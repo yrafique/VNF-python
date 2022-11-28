@@ -38,8 +38,6 @@ class Demand:
         self.demandValue=demandValue
 
 
-
-
 #Read Nodes from XML
 def read_nodes(nodelist) -> dict:
     nodes = {} #creates empty nodes dictionary
@@ -97,8 +95,6 @@ def read_demands(demandlist)-> dict:
         demands[count_demands] = cur_demand
     return demands
 
-#del (Read_Data, demandlist, linklist, nodelist)
-
 #Function that will be called to read networks from other files
 def read_network(filename: str) -> dict:
     Read_Data = minidom.parse(filename)
@@ -115,14 +111,8 @@ def read_network(filename: str) -> dict:
 
     return c
 
-    
-    
-    
-
-    
 
 #Print Read File
-
 #Testing Nodes
 def print_test(network_name: str, nodes: dict, links: dict, demands: dict ):
     print('\n\nNetwork Name: ' + network_name)
@@ -137,16 +127,3 @@ def print_test(network_name: str, nodes: dict, links: dict, demands: dict ):
     for link in links:
         s = 'Link # \t' + str(link) + ', From: ' + (links.get(link).get("source")).ljust(15) + ', To: '+ (links.get(link).get("destination")).ljust(15)+ ",\t Capacity: " + str(links.get(link).get("capacity")) + ", \tCost: " + str(links.get(link).get("cost"))
         print(s)
-
-''' 
-
-network_name = "janos-us.xml"
-G2 = read_network(network_name)
-
-nodes = G2[0]
-links = G2[1]
-demands = G2[2]
-#print(nodes.keys())
-
-print_test(network_name,nodes,links,demands)
-'''
