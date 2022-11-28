@@ -1,0 +1,57 @@
+
+#Building a Network with Network
+
+#1. Convert XML Network Dictionary into a networkx graph
+#2. Create a 3 server, linked network and run shortest path
+#3. Implement Random Placement Algorithm
+
+import networkx as nx
+
+import matplotlib.pyplot as plt
+
+from ImportNetworkFromXML import *
+
+G = nx.Graph()
+
+
+options = ['abilene.xml' , 'janos-us.xml']
+
+network_name = options[1]
+from_xml = read_network(network_name)
+
+nodes = from_xml[0]
+links = from_xml[1]
+demands = from_xml[2]
+#print(nodes.values())
+
+#print_test(network_name,nodes,links,demands)
+
+#G.add_nodes_from(nodes)
+#G.add_edges_from(links)
+
+
+#print(nodes.values())
+
+
+for node in nodes:
+    node_id = nodes[node].get("id")
+    x_cor = nodes[node].get("x_cor")
+    y_cor = nodes[node].get("y_cor")
+    G.add_node(node_id, pos=(x_cor, y_cor))
+
+
+for link in links.keys():
+    source = links[link].get("source")
+    for source_node in nodes:
+        if nodes[source_node].get('id') == source:
+            break
+    dest = links[link].get("destination")
+    for dest_node in nodes:
+        if nodes[dest_node].get('id') == dest:
+            break
+    capacity = links[link].get("capacity")
+    cost = links[link].get("cost")
+    G.add_edges_from([(source, dest, {'capacity': capacity, 'cost': cost})])
+
+
+nx.draw(G, nx.get_node_attributes(G, 'pos'), with_labels=True, node_size=0)
