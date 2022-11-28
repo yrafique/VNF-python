@@ -96,7 +96,7 @@ def read_demands(demandlist)-> dict:
     return demands
 
 #Function that will be called to read networks from other files
-def read_network(filename: str) -> dict:
+def read_XMLnetwork(filename: str) -> dict:
     Read_Data = minidom.parse(filename)
     nodelist = Read_Data.getElementsByTagName("node")
     nodes = read_nodes(nodelist)
