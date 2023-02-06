@@ -1,0 +1,68 @@
+import networkx as nx
+import random
+
+class User:
+    """
+    Class representing a user with attributes:
+    - x: x-coordinate of user location
+    - y: y-coordinate of user location
+    - app_req: list of application requirements for the user
+    """
+    def __init__(self, x, y, app_req):
+        self.x = x
+        self.y = y
+        self.app_req = app_req
+
+class Demand:
+    """
+    Class representing a demand with attributes:
+    - src: source node of the demand
+    - dest: destination node of the demand
+    - bw: required bandwidth for the demand
+    - delay: delay requirement for the demand
+    """
+    def __init__(self, src, dest, bw, delay):
+        self.src = src
+        self.dest = dest
+        self.bw = bw
+        self.delay = delay
+
+class App:
+    """
+    Class representing an application with attributes:
+    - name: name of the application
+    - vnfs: list of VNFs required for the application
+    """
+    def __init__(self, name, vnfs):
+        self.name = name
+        self.vnfs = vnfs
+
+class Candidate:
+    """
+    Class representing a placement candidate node with attributes:
+    - name: name of the candidate node
+    - x: x-coordinate of the candidate node
+    - y: y-coordinate of the candidate node
+    - cpu: total CPU capacity of the candidate node
+    - storage: total storage capacity of the candidate node
+    - cpu_used: CPU usage of the candidate node
+    - storage_used: storage usage of the candidate node
+    """
+    def __init__(self, name, x, y, cpu, storage):
+        self.name = name
+        self.x = x
+        self.y = y
+        self.cpu = cpu
+        self.storage = storage
+        self.cpu_used = 0
+        self.storage_used = 0
+        
+    def place_vnf(self, vnf_cpu, vnf_storage):
+        """
+        Function to place a VNF on the candidate node, updating
+        the cpu_used and storage_used attributes.
+        """
+        self.cpu_used += vnf_cpu
+        self.storage_used += vnf_storage
+
+
