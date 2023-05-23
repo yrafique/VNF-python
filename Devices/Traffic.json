@@ -1,0 +1,61 @@
+{
+    "trafficStatistics": [
+      {
+        "application": "Autonomous Traffic", 
+        "bandwidth": [0.05, 10], #Mbps
+        "latency": 10,
+        "deviceDensity": 12000, #Km^2
+        "source": "DeutscheTelekom"
+      },
+      {
+        "application": "Road Safety",
+        "bandwidth": [0.005],
+        "latency": [10, 100],
+        "deviceDensity": 3000,
+        "source": "Schulz"
+      },
+      {
+        "application": "City Surveillance",
+        "bandwidth": [20, 100],
+        "latency": 10,
+        "deviceDensity": 60,
+        "source": "Munoz, Marabissi"
+      },
+      {
+        "application": "Structural Health",
+        "bandwidth": [50, 100],
+        "latency": [1, 20],
+        "deviceDensity": 60000,
+        "source": "Marabissi"
+      },
+      {
+        "application": "Home Energy",
+        "bandwidth": [0.001, 0.1],
+        "latency": [300, 200],
+        "deviceDensity": 6000,
+        "source": "Gungor"
+      },
+      {
+        "application": "Smart Grids",
+        "bandwidth": [0.001, 1.5],
+        "latency": [1, 20],
+        "deviceDensity": 6000,
+        "source": "Schulz"
+      },
+      {
+        "application": "Connected Ambulance",
+        "bandwidth": [1000],
+        "latency": 10,
+        "deviceDensity": 60,
+        "source": "Cisotto2019"
+      },
+      {
+        "application": "Remote Monitoring",
+        "bandwidth": [5],
+        "latency": 250,
+        "deviceDensity": 60000,
+        "source": "Cisotto2019"
+      }
+    ]
+  }
+  
