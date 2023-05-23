@@ -1,9 +1,13 @@
 import os
 
 # set the path to your GAMS installation
-gams_path = "C://GAMS/win64/"
-print(gams_path)
-os.environ["PATH"] += os.pathsep + gams_path
+
+import sys
+sys.path.append(r"C:\GAMS\win64\24.9\apifiles\Python\api\api_36")
+sys.path.append(r"C:\GAMS\win64\24.9\apifiles\Python\api\gams")
+sys.path.append(r"C:\Program Files\Python36")
+
+
 
 # import the GAMS API
 import gams
