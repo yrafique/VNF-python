@@ -1,7 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
-from Import_NetworkFromXML import read_XMLnetwork
+from Import_NetworkFromXML_backup import read_XMLnetwork
 import math
 
 def convert_nodes(G, nodes):

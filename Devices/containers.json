@@ -1,0 +1,95 @@
+{
+    "Containers": [
+      {
+        "application": "Autonomous Traffic",
+        "vnfs": [
+          {"name": "Traffic Management", "storage": 2, "memory": 4, "cpu": 2},
+          {"name": "Data Analytics", "storage": 10, "memory": 8, "cpu": 3},
+          {"name": "Traffic Routing", "storage": 1, "memory": 2, "cpu": 1}
+        ],
+        "microservices": [
+          {"name": "Vehicle Tracking", "storage": 5, "memory": 4, "cpu": 2},
+          {"name": "Traffic Light Control", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Emergency Vehicle Priority", "storage": 2, "memory": 2, "cpu": 1}
+        ]
+      },
+      {
+        "application": "Road Safety",
+        "vnfs": [
+          {"name": "Accident Detection", "storage": 5, "memory": 4, "cpu": 2},
+          {"name": "Emergency Alert", "storage": 1, "memory": 1, "cpu": 1}
+        ],
+        "microservices": [
+          {"name": "Safety Protocol", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Alert Notification", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
+        ]
+      },
+      {
+        "application": "City Surveillance",
+        "vnfs": [
+          {"name": "Video Analytics", "storage": 20, "memory": 16, "cpu": 4},
+          {"name": "Data Storage", "storage": 50, "memory": 8, "cpu": 2}
+        ],
+        "microservices": [
+          {"name": "Face Recognition", "storage": 10, "memory": 8, "cpu": 3},
+          {"name": "License Plate Recognition", "storage": 5, "memory": 4, "cpu": 2}
+        ]
+      },
+      {
+        "application": "Structural Health",
+        "vnfs": [
+          {"name": "Sensor Data Aggregator", "storage": 5, "memory": 2, "cpu": 1},
+          {"name": "Data Analysis", "storage": 10, "memory": 4, "cpu": 2}
+        ],
+        "microservices": [
+          {"name": "Vibration Analysis", "storage": 2, "memory": 1, "cpu": 1},
+          {"name": "Health Reporting", "storage": 1, "memory": 1, "cpu": 1}
+        ]
+      },
+      {
+        "application": "Home Energy",
+        "vnfs": [
+          {"name": "Energy Monitoring", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Energy Optimization", "storage": 2, "memory": 2, "cpu": 1}
+        ],
+        "microservices": [
+          {"name": "HVAC Control", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Lighting Control", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
+        ]
+      },
+      {
+        "application": "Smart Grids",
+        "vnfs": [
+          {"name": "Grid Monitoring", "storage": 2, "memory": 2, "cpu": 1},
+          {"name": "Load Balancing", "storage": 1, "memory": 1, "cpu": 1}
+        ],
+        "microservices": [
+          {"name": "Energy Forecasting", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Fault Detection", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
+        ]
+      },
+      {
+        "application": "Connected Ambulance",
+        "vnfs": [
+          {"name": "Medical Data Stream", "storage": 5, "memory": 4, "cpu": 2},
+          {"name": "Emergency Routing", "storage": 2, "memory": 2, "cpu": 1}
+        ],
+        "microservices": [
+          {"name": "Vital Signs Monitoring", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Communication Link", "storage": 1, "memory": 1, "cpu": 1}
+        ]
+      },
+      {
+        "application": "Remote Monitoring",
+        "vnfs": [
+          {"name": "Data Collection", "storage": 3, "memory": 2, "cpu": 1},
+          {"name": "Anomaly Detection", "storage": 5, "memory": 4, "cpu": 2}
+        ],
+        "microservices": [
+          {"name": "Alert System", "storage": 1, "memory": 1, "cpu": 1},
+          {"name": "Remote Control", "storage": 1, "memory": 1, "cpu": 1}
+        ]
+      }
+    ]
+  }
+  

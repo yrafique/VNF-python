@@ -2,9 +2,9 @@
     "trafficStatistics": [
       {
         "application": "Autonomous Traffic", 
-        "bandwidth": [0.05, 10], #Mbps
+        "bandwidth": [0.05, 10],
         "latency": 10,
-        "deviceDensity": 12000, #Km^2
+        "deviceDensity": 12000,
         "source": "DeutscheTelekom"
       },
       {

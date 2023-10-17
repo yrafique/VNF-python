@@ -17,7 +17,7 @@ import PerformanceAnalysis.MeasureStatistics as MeasureStatistics  # to measure 
 import SearchAlgos.PageRank as  PageRank  # to compute node rankings based on pagerank
 
 # Importing a user-defined function to read network data from XML file
-from Import_NetworkFromXML import *
+from Import_NetworkFromXML_backup import *
 
 # Defining a function to convert nodes in the XML network dictionary to nodes in networkx graph
 def convert_nodes (G, nodes):
