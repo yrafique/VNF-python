@@ -98,10 +98,16 @@
      <y>543.0</y>
     </coordinates>
    </node>
-    <node id="WashingtonEastCloud">
+    <node id="OhioCloud">
     <coordinates>
-     <x>38.904900097975634</x>, 
-     <y>-77.03935460734695</y>
+     <x>-400.138314184791916</x>, 
+     <y>-830.00592092907189</y>
+    </coordinates>
+   </node>
+   <node id="OregonCloud">
+    <coordinates>
+     <x>-430.82755158960391</x>, 
+     <y>-120.55721609633432</y>
     </coordinates>
    </node>
   </nodes>
@@ -837,6 +843,66 @@
      </addModule>
      <addModule>
       <capacity>4000.0</capacity>
+      <cost>236800.0</cost>
+     </addModule>
+    </additionalModules>
+   </link>
+   <link id="L50">
+    <source>N13</source>
+    <target>OhioCloud</target>
+    <routingCost>4.0</routingCost>
+    <additionalModules>
+     <addModule>
+      <capacity>100000.0</capacity>
+      <cost>226800.0</cost>
+     </addModule>
+     <addModule>
+      <capacity>400000.0</capacity>
+      <cost>236800.0</cost>
+     </addModule>
+    </additionalModules>
+   </link>
+   <link id="L51">
+    <source>N12</source>
+    <target>OhioCloud</target>
+    <routingCost>4.0</routingCost>
+    <additionalModules>
+     <addModule>
+      <capacity>100000.0</capacity>
+      <cost>226800.0</cost>
+     </addModule>
+     <addModule>
+      <capacity>400000.0</capacity>
+      <cost>236800.0</cost>
+     </addModule>
+    </additionalModules>
+   </link>
+      <link id="L52">
+    <source>N3</source>
+    <target>OregonCloud</target>
+    <routingCost>4.0</routingCost>
+    <additionalModules>
+     <addModule>
+      <capacity>100000.0</capacity>
+      <cost>226800.0</cost>
+     </addModule>
+     <addModule>
+      <capacity>400000.0</capacity>
+      <cost>236800.0</cost>
+     </addModule>
+    </additionalModules>
+   </link>
+   <link id="L53">
+    <source>N6</source>
+    <target>OregonCloud</target>
+    <routingCost>4.0</routingCost>
+    <additionalModules>
+     <addModule>
+      <capacity>100000.0</capacity>
+      <cost>226800.0</cost>
+     </addModule>
+     <addModule>
+      <capacity>400000.0</capacity>
       <cost>236800.0</cost>
      </addModule>
     </additionalModules>
