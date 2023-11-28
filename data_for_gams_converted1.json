@@ -1,0 +1,12 @@
+{
+    "Apps": [],
+    "Users": [],
+    "Servers": [],
+    "VNFs": [],
+    "AppDefinition": {},
+    "Users_AP": {},
+    "Users_App": {},
+    "HostUtilizationCap": {},
+    "Topology": {},
+    "LinkDelay": {}
+}
