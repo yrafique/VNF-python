@@ -31,7 +31,7 @@ M /1000000/;
 
 ***************************************************************************************************************************************************************************************************
 
-$if not set gdxin $set gdxin Optimization_input
+$if not set gdxin $set gdxin data
 $GDXIN %gdxin%
 $LOAD VNFs Apps Servers HostUtilizationCap Users Users_AP Users_App Topology LinkDelay App_Definition BW_Req CPU_Req LinkCap UserBW UserSC SCs
 $GDXIN
