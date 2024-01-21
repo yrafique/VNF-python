@@ -1,11 +1,10 @@
 Set:,Apps
 Smart Grids
-Remote Monitoring
-Connected Ambulance
-Home Energy
-City Surveillance
 Road Safety
+Connected Ambulance
 Autonomous Traffic
+Remote Monitoring
+City Surveillance
 Structural Health
 
 Set:,Users
@@ -61,23 +60,23 @@ OhioCloud
 OregonCloud
 
 Set:,VNFs
-Anomaly Detection
 Emergency Alert
+Data Analytics
+Data Storage
+Traffic Routing
+Energy Monitoring
+Sensor Data Aggregator
+Medical Data Stream
+Anomaly Detection
+Grid Monitoring
+Video Analytics
+Accident Detection
+Load Balancing
+Traffic Management
+Data Collection
 Energy Optimization
 Data Analysis
-Accident Detection
-Sensor Data Aggregator
-Energy Monitoring
-Load Balancing
-Data Collection
-Medical Data Stream
-Video Analytics
 Emergency Routing
-Data Analytics
-Traffic Management
-Traffic Routing
-Grid Monitoring
-Data Storage
 
 Parameter:,Users_AP
 user_0,N1,1.0
@@ -103,7 +102,7 @@ user_19,N4,1.0
 user_20,N5,1.0
 user_21,N6,1.0
 user_22,N7,1.0
-user_23,N3,1.0
+user_23,N8,1.0
 user_24,N9,1.0
 user_25,N10,1.0
 user_26,N11,1.0
@@ -113,35 +112,35 @@ user_29,N14,1.0
 
 Parameter:,Users_App
 user_0,Smart Grids,1.0
-user_1,Remote Monitoring,1.0
+user_1,Road Safety,1.0
 user_2,Connected Ambulance,1.0
-user_3,Home Energy,1.0
-user_4,City Surveillance,1.0
-user_5,Home Energy,1.0
-user_6,Road Safety,1.0
-user_7,Connected Ambulance,1.0
-user_8,Remote Monitoring,1.0
-user_9,Road Safety,1.0
-user_10,City Surveillance,1.0
-user_11,Autonomous Traffic,1.0
-user_12,Smart Grids,1.0
-user_13,Connected Ambulance,1.0
+user_3,Autonomous Traffic,1.0
+user_4,Connected Ambulance,1.0
+user_5,Connected Ambulance,1.0
+user_6,Autonomous Traffic,1.0
+user_7,Autonomous Traffic,1.0
+user_8,Smart Grids,1.0
+user_9,Remote Monitoring,1.0
+user_10,Road Safety,1.0
+user_11,City Surveillance,1.0
+user_12,Remote Monitoring,1.0
+user_13,City Surveillance,1.0
 user_14,Smart Grids,1.0
 user_15,Connected Ambulance,1.0
-user_16,Remote Monitoring,1.0
-user_17,Connected Ambulance,1.0
-user_18,Smart Grids,1.0
-user_19,Road Safety,1.0
-user_20,Connected Ambulance,1.0
-user_21,Autonomous Traffic,1.0
-user_22,Structural Health,1.0
+user_16,Structural Health,1.0
+user_17,Structural Health,1.0
+user_18,City Surveillance,1.0
+user_19,Connected Ambulance,1.0
+user_20,City Surveillance,1.0
+user_21,Smart Grids,1.0
+user_22,Connected Ambulance,1.0
 user_23,Road Safety,1.0
-user_24,Structural Health,1.0
-user_25,Autonomous Traffic,1.0
-user_26,Road Safety,1.0
-user_27,Autonomous Traffic,1.0
-user_28,Connected Ambulance,1.0
-user_29,Structural Health,1.0
+user_24,Smart Grids,1.0
+user_25,Remote Monitoring,1.0
+user_26,City Surveillance,1.0
+user_27,Connected Ambulance,1.0
+user_28,Remote Monitoring,1.0
+user_29,City Surveillance,1.0
 
 Parameter:,HostUtilizationCap
 N1,100.0
