@@ -1,4 +1,4 @@
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 1
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -56,7 +56,7 @@ GDXIN   c:\Users\youse\Documents\GitHub\VNF-python\data.gdx
   45  V(Servers,VNFs)                          "BinaryVariable: Which Server? Which VNF?",
   46   
   47  *SERVER-SFC-VNF
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 2
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -114,7 +114,7 @@ C o m p i l a t i o n
   98  *OTHER CONSTRAINTS
   99  Forcing(Servers,Users,VNFs)$(ord(VNFs) = 1)..
  100           X(Servers,Users,VNFs) =e= 1$Users_AP(Users,Servers);
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 3
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -172,7 +172,7 @@ C o m p i l a t i o n
  151  Loop((Servers,Servers2)$Topology(Servers,Servers2),PhysicalBW(Servers,Servers2) =  SUM((Users,VNFs,VNFs2)$(SCs(Users,VNFs,VNFs2) AND ord(VNFs2)>ord(VNFs)),BW.l(Servers,Servers2,Users,VNFs,VNFs2)));
 ****                                 $141                                                                          $141
  152   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 4
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -181,7 +181,7 @@ C o m p i l a t i o n
  154   
  155   
  156  DISPLAY HostUtilization, PhysicalBW;
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 5
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 5
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Error Messages
 
@@ -196,7 +196,7 @@ Error Messages
 495  Load dimensions are different
 
 **** 20 ERROR(S)   0 WARNING(S)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 12/05/23 12:36:54 Page 6
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 6
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
@@ -207,7 +207,7 @@ Include File Summary
      2       35 GDXIN          1      35  c:\Users\youse\Documents\GitHub\VNF-python\data.gdx
 
 
-COMPILATION TIME     =        0.016 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
+COMPILATION TIME     =        0.032 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
 
 
 USER: Mohamad Awad                                   G151015:1146AO-GEN
