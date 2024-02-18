@@ -1,42 +1,37 @@
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 1
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
-   1  OPTION limrow = 100 ;
+   1  OPTION limrow = 100;
    2  OPTION limcol = 100;
    3   
-   4  SET  VNFs        "Set of VNFs"
-   5       Apps        "Set of IoT Apps"
-   6       Servers     "Set of Servers"
-   7       Users       "Set of Users";
-   8   
-   9  ALIAS (Servers,Servers2);
-  10  ALIAS (VNFs,VNFs2,VNFs3);
-  11   
-  12  ***************************************************************************************************************************************************************************************************
-  13   
-  14  PARAMETERS
-  15           Topology(Servers,Servers2)     "Table to define our network topology with bidirectional links"
-  16           LinkDelay(Servers,Servers2)    "Table to define our network topology with bidirectional links"
-  17           App_Definition(VNFs,Apps)      "Matrix to define VNFs -> Apps relation and order of deployement"
-  18           CPU_Req(VNFs)                  "Parameter to define each VNFs's CPU requirement"
-  19           BW_Req(Apps)                   "Parameter to define each VNFs's CPU requirement"
-  20           Users_AP(Users,Servers)                "Parameter to define User -> AP Association"
-  21           Users_App(Users,Apps)
-  22           HostUtilizationCap(Servers)    "Parameter to define Server Utilization Capacity"
-  23           LinkCap(Servers,Servers2)      "Parameter to define max link capacity"
-  24           UserBW(Users)                  "new"
-  25           UserSC(VNFs,Users)            "new"
-  26           SCs(Users,VNFs,VNFs2)           "new";
-  27   
-  28  PARAMETER M
-  29  M /1000000/;
-  30   
-  31   
-  32  ***************************************************************************************************************************************************************************************************
-  33   
-GDXIN   c:\Users\youse\Documents\GitHub\VNF-python\data.gdx
+   4  SETS
+   5      VNFs         "Set of VNFs"
+   6      Apps         "Set of IoT Apps"
+   7      Servers      "Set of Servers"
+   8      Users        "Set of Users";
+   9   
+  10  ALIAS (Servers, Servers2);
+  11  ALIAS (VNFs, VNFs2, VNFs3);
+  12   
+  13  PARAMETERS
+  14      Topology(Servers, Servers2)        "Topology with bidirectional links"
+  15      LinkDelay(Servers, Servers2)       "Link delays"
+  16      App_Definition(VNFs, Apps)         "VNFs -> Apps relation and order"
+  17      CPU_Req(VNFs)                      "VNF CPU requirements"
+  18      BW_Req(Apps)                       "App bandwidth requirements"
+  19      Users_AP(Users, Servers)           "User -> AP Association"
+  20      Users_App(Users, Apps)             "User -> App Association"
+  21      HostUtilizationCap(Servers)        "Server Utilization Capacity"
+  22      LinkCap(Servers, Servers2)         "Max link capacity"
+  23      UserBW(Users)                      "User bandwidth requirements"
+  24      UserSC(VNFs, Users)                "User to VNF association"
+  25      SCs(Users, VNFs, VNFs2)            "Service Chains";
+  26   
+  27  PARAMETER M /1000000/;
+  28   
+GDXIN   c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\data.gdx
 --- LOAD  VNFs = 4:VNFs
 --- LOAD  Apps = 1:Apps
 --- LOAD  Servers = 3:Servers
@@ -44,170 +39,86 @@ GDXIN   c:\Users\youse\Documents\GitHub\VNF-python\data.gdx
 --- LOAD  Users = 2:Users
 --- LOAD  Users_AP = 5:Users_AP
 --- LOAD  Users_App = 6:Users_App
-  36  $LOAD VNFs Apps Servers HostUtilizationCap Users Users_AP Users_App Topology LinkDelay App_Definition BW_Req CPU_Req LinkCap UserBW UserSC SCs
+  30  $LOAD VNFs Apps Servers HostUtilizationCap Users Users_AP Users_App Topology LinkDelay App_Definition BW_Req CPU_Req LinkCap UserBW UserSC SCs
 ****                                                                              $495      $495           $492   $492    $492    $492   $492   $492,492
-  38   
-  39   
-  40  ***************************************************************************************************************************************************************************************************
+  31   
+  32  VARIABLES
+  33      z                                   "Objective function"
+  34      V(Servers, VNFs)                    "Server-VNF mapping"
+  35      X(Servers, Users, VNFs)             "Server-SFC-VNF mapping"
+  36      BW(Servers, Servers2, Users, VNFs, VNFs2) "Bandwidth on virtual links";
+  37   
+  38  BINARY VARIABLES
+  39      V(Servers, VNFs),
+  40      X(Servers, Users, VNFs);
   41   
-  42  VARIABLES
-  43  z,
-  44  *SERVER-VNF
-  45  V(Servers,VNFs)                          "BinaryVariable: Which Server? Which VNF?",
-  46   
-  47  *SERVER-SFC-VNF
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 2
+  42  POSITIVE VARIABLES
+  43      BW(Servers, Servers2, Users, VNFs, VNFs2);
+  44   
+  45  EQUATIONS
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
 
-  48  X(Servers,Users,VNFs)                    "Binary decision variable: Which Server? Which VNF? Which SFC?",
-  49   
-  50  *PATH CREATION
-  51  BW(Servers,Servers2,Users,VNFs,VNFs2)    "PositiveVariable: Bandwidth on virtual links -> mapped on physical links"
-  52  BWu(Servers,Servers2,Users);
+  46      Obj
+  47      DemandSatisfaction(Users, VNFs)
+  48      ActivateServer(Servers, Users, VNFs)
+  49      SeverLoad(Servers)
+  50      FlowRouting(Users, Servers, VNFs, VNFs2)
+  51      Forcing(Servers, Users, VNFs)
+  52      SingleFlow(Servers, Users);
   53   
-  54   
-  55  BINARY VARIABLES
-  56  V(Servers,VNFs),
-  57  X(Servers,Users,VNFs);
-  58   
-  59  POSITIVE VARIABLES
-  60  BW(Servers,Servers2,Users,VNFs,VNFs2),
-  61  BWu(Servers,Servers2,Users);
-  62   
-  63   
-  64   
-  65  EQUATIONS
-  66  Obj                                              ""
-  67  DemandSatisfaction(Users,VNFs)              ""
-  68  ActivateServer(Servers,Users,VNFs)               ""
-  69  SeverLoad(Servers)                               ""
-  70  FlowRouting(Users,Servers,VNFs,VNFs2)       ""
-  71  Forcing(Servers,Users,VNFs)                           ""
-  72  SingleFlow(Servers,Users) ;
-  73  *SingleVNF(VNFs);
-  74   
-  75   
-  76   
-  77  Obj..
-  78           z =e= SUM((Servers,VNFs),V(Servers,VNFs)) + SUM((Servers,Servers2,Users,VNFs,VNFs2),BW(Servers,Servers2,Users,VNFs,VNFs2));
-  79   
-  80   
-  81  *SFC DEMAND + VNF MAPPING
-  82  DemandSatisfaction(Users,VNFs)..
-  83           SUM(Servers,X(Servers,Users,VNFs)) =e= 1$UserSC(VNFs,Users);
-  84   
-  85  *ACTIVATE SERVER
-  86  ActivateServer(Servers,Users,VNFs)$UserSC(VNFs,Users)..
-  87           V(Servers,VNFs) =g=   X(Servers,Users,VNFs);
-  88   
-  89  *UPDATE CPU LOAD
-  90  SeverLoad(Servers)..
-  91           SUM((Users,VNFs)$UserSC(VNFs,Users),X(Servers,Users,VNFs)* CPU_Req(VNFs)) =l= 400;
-  92   
-  93  *PATH CREATION
-  94  FlowRouting(Users,Servers,VNFs,VNFs2)$(SCs(Users,VNFs,VNFs2) AND UserSC(VNFs,Users) AND UserSC(VNFs2,Users) AND ord(VNFs2)>ord(VNFs))..
-  95           SUM(Servers2$Topology(Servers,Servers2), BW(Servers,Servers2,Users,VNFs,VNFs2)) - SUM(Servers2$Topology(Servers2,Servers), BW(Servers2,Servers,Users,VNFs,VNFs2)) =e=    (X(Servers,Users,VNFs) - X(Servers,Users,VNFs2))*UserBW(Users);
-  96   
-  97   
-  98  *OTHER CONSTRAINTS
-  99  Forcing(Servers,Users,VNFs)$(ord(VNFs) = 1)..
- 100           X(Servers,Users,VNFs) =e= 1$Users_AP(Users,Servers);
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 3
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-C o m p i l a t i o n
-
-
- 101   
- 102  *SINGLE FLOW PER USER
- 103  SingleFlow(Servers,Users)..
- 104           SUM(Servers2$Topology(Servers,Servers2),SUM((VNFs,VNFs2)$(SCs(Users,VNFs,VNFs2) AND ord(VNFs2)>ord(VNFs)),BW(Servers,Servers2,Users,VNFs,VNFs2))) =l=  UserBW(Users);
- 105   
- 106  *SINGLE VNF
- 107  *SingleVNF(VNFs)..
- 108  *         SUM(Servers,V(Servers,VNFs)) =e= 1;
- 109   
- 110   
- 111   
- 112  MODEL VNFs_Placement /all/;
- 113   
- 114  SOLVE VNFs_Placement using MIP minimizing z;
+  54  * Objective function to minimize costs
+  55  Obj..
+  56      z =e= SUM((Servers, VNFs), V(Servers, VNFs) * HostUtilizationCap(Servers)) + SUM((Servers, Servers2, Users, VNFs, VNFs2), BW(Servers, Servers2, Users, VNFs, VNFs2) * LinkCap(Servers, Servers2));
+  57   
+  58  * Ensure demand satisfaction for each user and VNF combination
+  59  DemandSatisfaction(Users, VNFs)..
+  60      SUM(Servers, X(Servers, Users, VNFs)) =e= SUM(Apps, App_Definition(VNFs, Apps));
+  61   
+  62  * Server activation based on VNF deployment
+  63  ActivateServer(Servers, Users, VNFs)..
+  64      SUM(VNFs, V(Servers, VNFs)) =g= 1;
+****              $125
+  65   
+  66  * Enforce server load does not exceed capacity
+  67  SeverLoad(Servers)..
+  68      SUM(VNFs, V(Servers, VNFs) * CPU_Req(VNFs)) =l= HostUtilizationCap(Servers);
+  69   
+  70  * Define more equations as needed
+  71   
+  72  MODEL VNFs_Placement /all/;
+  73  SOLVE VNFs_Placement USING MIP MINIMIZING z;
 ****                                             $257
- 115   
- 116  DISPLAY VNFs, Users, Users_App, Users_AP, UserBW, UserSC, App_Definition, CPU_Req, BW_Req,V.l, X.l, BW.l;
-****                                                 $141    $141            $141     $141    $141$141 $141  $141
- 117   
- 118   
-      *###############    Count of Servers Switched ON ###############
-      Parameter OnServers;
-      OnServers = 0;
-      OnServers = sum(Servers, Y.l(Servers));
-       
-      *###############    To Store VNF Deployements ###############
-      Parameter Deployed(VNFs,Servers);
-      Deployed(VNFs,Servers) = 0;
-      Deployed(VNFs,Servers) =  X.l(VNFs,Servers);
-       
-      *###############    To Store Current Link Load ###############
-      Parameter LinkLoad(Servers, Servers2);
-      LinkLoad(Servers, Servers2)=0;
-      loop(Servers,
-      loop(Servers2,
-      LinkLoad(Servers, Servers2) = sum((VNFs,VNFs2,Apps),BW.l(Servers,Servers2,VNFs,VNFs2,Apps))););
-       
-      *###############    To Store Network Delay ###############
-      Parameter NetworkDelay(Apps);
-      NetworkDelay(Apps) = 0;
-      NetworkDelay(Apps) = Delay.l(Apps);
- 142   
- 143  *###############    To Store Host Utilization ###############
- 144  Parameter HostUtilization(Servers);
- 145  HostUtilization(Servers) = 0;
- 146  loop(Servers, HostUtilization(Servers) = SUM((Users,VNFs)$UserSC(VNFs,Users),X.l(Servers,Users,VNFs)* CPU_Req(VNFs)));
- 147   
- 148   
- 149  Parameter PhysicalBW(Servers,Servers2);
- 150  PhysicalBW(Servers,Servers2) = 0;
- 151  Loop((Servers,Servers2)$Topology(Servers,Servers2),PhysicalBW(Servers,Servers2) =  SUM((Users,VNFs,VNFs2)$(SCs(Users,VNFs,VNFs2) AND ord(VNFs2)>ord(VNFs)),BW.l(Servers,Servers2,Users,VNFs,VNFs2)));
-****                                 $141                                                                          $141
- 152   
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 4
-G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
-C o m p i l a t i o n
-
-
- 153   
- 154   
- 155   
- 156  DISPLAY HostUtilization, PhysicalBW;
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 5
+  74   
+  76  $UNLOAD V L X L BW L
+****            $140$140 $140
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Error Messages
 
 
-141  Symbol declared but no values have been assigned. Check for missing
-        data definition, assignment, data loading or implicit assignment
-        via a solve statement.
-        A wild shot: You may have spurious commas in the explanatory
-        text of a declaration. Check symbol reference list.
+125  Set is under control already
+140  Unknown symbol
 257  Solve statement not checked because of previous errors
 492  Symbol not in GDX
 495  Load dimensions are different
 
-**** 20 ERROR(S)   0 WARNING(S)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 01/30/24 11:44:43 Page 6
+**** 14 ERROR(S)   0 WARNING(S)
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
 
    SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
 
-     1        1 INPUT          0       0  c:\Users\youse\Documents\GitHub\VNF-python\m2.gms
-     2       35 GDXIN          1      35  c:\Users\youse\Documents\GitHub\VNF-python\data.gdx
+     1        1 INPUT          0       0  c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\m2.gms
+     2       29 GDXIN          1      29  c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\data.gdx
+     3       75 GDXOUT         1      75  c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\Optimization_output.gdx
 
 
-COMPILATION TIME     =        0.032 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
+COMPILATION TIME     =        0.000 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
 
 
 USER: Mohamad Awad                                   G151015:1146AO-GEN
@@ -217,7 +128,7 @@ USER: Mohamad Awad                                   G151015:1146AO-GEN
 
 **** FILE SUMMARY
 
-Input      c:\Users\youse\Documents\GitHub\VNF-python\m2.gms
-Output     c:\Users\youse\Documents\GitHub\VNF-python\m2.lst
+Input      c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\m2.gms
+Output     c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\m2.lst
 
 **** USER ERROR(S) ENCOUNTERED

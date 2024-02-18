@@ -1,0 +1,30 @@
++--------+---------------------------+--------------------+----------------------------------------+------------------------------+------------+
+| CNF ID |          CNF Name         |      CNF Type      |              Applications              |       Associated Users       | User Count |
++--------+---------------------------+--------------------+----------------------------------------+------------------------------+------------+
+|   1    |           Proxy           |  Network Function  | City Surveillance, Connected Ambulance | 1, 10, 14, 19, 22, 26, 27, 9 |     8      |
+|   2    |          Firewall         |  Network Function  |     Remote Monitoring, Road Safety     |     11, 12, 13, 2, 29, 6     |     6      |
+|   3    |       Load Balancer       |  Network Function  |              Smart Grids               |      16, 20, 23, 25, 5       |     5      |
+|   4    |            CDN            |  Network Function  |              Smart Grids               |      16, 20, 23, 25, 5       |     5      |
+|   5    |        Data Storage       |  Network Function  |           City Surveillance            |         1, 10, 14, 9         |     4      |
+|   6    |          IDS/IPS          |  Network Function  |          Connected Ambulance           |        19, 22, 26, 27        |     4      |
+|   7    |            VPN            |  Network Function  |              Road Safety               |          11, 12, 6           |     3      |
+|   8    |           Cache           |  Network Function  |           Structural Health            |          17, 21, 7           |     3      |
+|   9    |       Data Analysis       |  Network Function  |           Structural Health            |          17, 21, 7           |     3      |
+|   10   |       Energy Router       |  Network Function  |              Home Energy               |          0, 24, 28           |     3      |
+|   11   |       Energy Storage      |  Network Function  |              Home Energy               |          0, 24, 28           |     3      |
+|   12   |           Router          |  Network Function  |           Remote Monitoring            |          13, 2, 29           |     3      |
+|   13   |     Energy Forecasting    | Analytics Function |              Smart Grids               |      16, 20, 23, 25, 5       |     5      |
+|   14   |      Fault Detection      | Analytics Function |              Smart Grids               |      16, 20, 23, 25, 5       |     5      |
+|   15   |      Face Recognition     | Analytics Function |           City Surveillance            |         1, 10, 14, 9         |     4      |
+|   16   | License Plate Recognition | Analytics Function |           City Surveillance            |         1, 10, 14, 9         |     4      |
+|   17   |   Vital Signs Monitoring  | Analytics Function |          Connected Ambulance           |        19, 22, 26, 27        |     4      |
+|   18   |     Communication Link    | Analytics Function |          Connected Ambulance           |        19, 22, 26, 27        |     4      |
+|   19   |      Safety Protocol      | Analytics Function |              Road Safety               |          11, 12, 6           |     3      |
+|   20   |     Alert Notification    | Analytics Function |              Road Safety               |          11, 12, 6           |     3      |
+|   21   |     Vibration Analysis    | Analytics Function |           Structural Health            |          17, 21, 7           |     3      |
+|   22   |      Health Reporting     | Analytics Function |           Structural Health            |          17, 21, 7           |     3      |
+|   23   |        HVAC Control       | Analytics Function |              Home Energy               |          0, 24, 28           |     3      |
+|   24   |      Lighting Control     | Analytics Function |              Home Energy               |          0, 24, 28           |     3      |
+|   25   |        Alert System       | Analytics Function |           Remote Monitoring            |          13, 2, 29           |     3      |
+|   26   |       Remote Control      | Analytics Function |           Remote Monitoring            |          13, 2, 29           |     3      |
++--------+---------------------------+--------------------+----------------------------------------+------------------------------+------------+

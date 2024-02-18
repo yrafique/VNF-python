@@ -1,13 +1,13 @@
 {
     "Apps": [
-        "Structural Health",
-        "Home Energy",
-        "Autonomous Traffic",
         "Road Safety",
-        "City Surveillance",
         "Connected Ambulance",
+        "Remote Monitoring",
+        "Autonomous Traffic",
         "Smart Grids",
-        "Remote Monitoring"
+        "City Surveillance",
+        "Structural Health",
+        "Home Energy"
     ],
     "Users": [
         "user_0",
@@ -62,114 +62,114 @@
         "OregonCloud"
     ],
     "VNFs": [
-        "Medical Data Stream",
-        "Energy Optimization",
+        "Anomaly Detection",
+        "Sensor Data Aggregator",
         "Load Balancing",
-        "Data Storage",
         "Emergency Alert",
-        "Data Analysis",
+        "Energy Optimization",
+        "Accident Detection",
+        "Video Analytics",
+        "Grid Monitoring",
         "Energy Monitoring",
         "Emergency Routing",
         "Data Analytics",
-        "Sensor Data Aggregator",
         "Traffic Routing",
-        "Anomaly Detection",
-        "Grid Monitoring",
-        "Traffic Management",
-        "Video Analytics",
-        "Accident Detection",
-        "Data Collection"
+        "Data Collection",
+        "Data Storage",
+        "Medical Data Stream",
+        "Data Analysis",
+        "Traffic Management"
     ],
     "AppDefinition": {
         "user_0": {
-            "Structural Health": 1
+            "Road Safety": 1
         },
-        "user_15": {
-            "Structural Health": 1
+        "user_11": {
+            "Road Safety": 1
         },
-        "user_20": {
-            "Structural Health": 1
+        "user_19": {
+            "Road Safety": 1
         },
-        "user_23": {
-            "Structural Health": 1
-        },
-        "user_28": {
-            "Structural Health": 1
+        "user_25": {
+            "Road Safety": 1
         },
         "user_1": {
-            "Home Energy": 1
+            "Connected Ambulance": 1
         },
-        "user_12": {
-            "Home Energy": 1
+        "user_24": {
+            "Connected Ambulance": 1
         },
-        "user_16": {
-            "Home Energy": 1
+        "user_29": {
+            "Connected Ambulance": 1
         },
         "user_2": {
-            "Autonomous Traffic": 1
+            "Remote Monitoring": 1
+        },
+        "user_3": {
+            "Remote Monitoring": 1
+        },
+        "user_4": {
+            "Remote Monitoring": 1
+        },
+        "user_8": {
+            "Remote Monitoring": 1
+        },
+        "user_23": {
+            "Remote Monitoring": 1
+        },
+        "user_27": {
+            "Remote Monitoring": 1
         },
         "user_5": {
             "Autonomous Traffic": 1
         },
-        "user_13": {
+        "user_7": {
             "Autonomous Traffic": 1
         },
-        "user_24": {
+        "user_9": {
             "Autonomous Traffic": 1
         },
-        "user_3": {
-            "Road Safety": 1
+        "user_14": {
+            "Autonomous Traffic": 1
         },
-        "user_4": {
-            "Road Safety": 1
-        },
-        "user_8": {
-            "Road Safety": 1
+        "user_21": {
+            "Autonomous Traffic": 1
         },
         "user_6": {
+            "Smart Grids": 1
+        },
+        "user_20": {
+            "Smart Grids": 1
+        },
+        "user_10": {
             "City Surveillance": 1
         },
-        "user_7": {
+        "user_13": {
             "City Surveillance": 1
         },
-        "user_17": {
+        "user_15": {
+            "City Surveillance": 1
+        },
+        "user_16": {
             "City Surveillance": 1
         },
         "user_18": {
             "City Surveillance": 1
         },
-        "user_29": {
+        "user_22": {
             "City Surveillance": 1
         },
-        "user_9": {
-            "Connected Ambulance": 1
+        "user_12": {
+            "Structural Health": 1
         },
-        "user_10": {
-            "Connected Ambulance": 1
+        "user_28": {
+            "Structural Health": 1
         },
-        "user_21": {
-            "Connected Ambulance": 1
-        },
-        "user_11": {
-            "Smart Grids": 1
-        },
-        "user_19": {
-            "Smart Grids": 1
-        },
-        "user_14": {
-            "Remote Monitoring": 1
-        },
-        "user_22": {
-            "Remote Monitoring": 1
-        },
-        "user_25": {
-            "Remote Monitoring": 1
+        "user_17": {
+            "Home Energy": 1
         },
         "user_26": {
-            "Remote Monitoring": 1
-        },
-        "user_27": {
-            "Remote Monitoring": 1
+            "Home Energy": 1
         }
     },
     "Users_AP": {
@@ -180,10 +180,10 @@
             "N2": 1
         },
         "user_2": {
-            "N3": 1
+            "N4": 1
         },
         "user_3": {
-            "N4": 1
+            "N8": 1
         },
         "user_4": {
             "N5": 1
@@ -222,7 +222,7 @@
             "N16": 1
         },
         "user_16": {
-            "N7": 1
+            "N1": 1
         },
         "user_17": {
             "N2": 1
@@ -231,7 +231,7 @@
             "N3": 1
         },
         "user_19": {
-            "N4": 1
+            "N8": 1
         },
         "user_20": {
             "N5": 1
@@ -240,13 +240,13 @@
             "N6": 1
         },
         "user_22": {
-            "N1": 1
+            "N7": 1
         },
         "user_23": {
-            "N8": 1
+            "N4": 1
         },
         "user_24": {
-            "N9": 1
+            "N16": 1
         },
         "user_25": {
             "N10": 1
@@ -266,85 +266,85 @@
     },
     "Users_App": {
         "user_0": {
-            "Structural Health": 1
+            "Road Safety": 1
         },
         "user_1": {
-            "Home Energy": 1
+            "Connected Ambulance": 1
         },
         "user_2": {
-            "Autonomous Traffic": 1
+            "Remote Monitoring": 1
         },
         "user_3": {
-            "Road Safety": 1
+            "Remote Monitoring": 1
         },
         "user_4": {
-            "Road Safety": 1
+            "Remote Monitoring": 1
         },
         "user_5": {
             "Autonomous Traffic": 1
         },
         "user_6": {
-            "City Surveillance": 1
-        },
-        "user_7": {
-            "City Surveillance": 1
-        },
-        "user_8": {
-            "Road Safety": 1
-        },
-        "user_9": {
-            "Connected Ambulance": 1
-        },
-        "user_10": {
-            "Connected Ambulance": 1
-        },
-        "user_11": {
             "Smart Grids": 1
         },
-        "user_12": {
-            "Home Energy": 1
-        },
-        "user_13": {
+        "user_7": {
             "Autonomous Traffic": 1
         },
-        "user_14": {
+        "user_8": {
             "Remote Monitoring": 1
         },
-        "user_15": {
+        "user_9": {
+            "Autonomous Traffic": 1
+        },
+        "user_10": {
+            "City Surveillance": 1
+        },
+        "user_11": {
+            "Road Safety": 1
+        },
+        "user_12": {
             "Structural Health": 1
         },
+        "user_13": {
+            "City Surveillance": 1
+        },
+        "user_14": {
+            "Autonomous Traffic": 1
+        },
+        "user_15": {
+            "City Surveillance": 1
+        },
         "user_16": {
-            "Home Energy": 1
+            "City Surveillance": 1
         },
         "user_17": {
-            "City Surveillance": 1
+            "Home Energy": 1
         },
         "user_18": {
             "City Surveillance": 1
         },
         "user_19": {
-            "Smart Grids": 1
+            "Road Safety": 1
         },
         "user_20": {
-            "Structural Health": 1
+            "Smart Grids": 1
         },
         "user_21": {
-            "Connected Ambulance": 1
-        },
-        "user_22": {
-            "Remote Monitoring": 1
-        },
-        "user_23": {
-            "Structural Health": 1
-        },
-        "user_24": {
             "Autonomous Traffic": 1
         },
-        "user_25": {
+        "user_22": {
+            "City Surveillance": 1
+        },
+        "user_23": {
             "Remote Monitoring": 1
         },
+        "user_24": {
+            "Connected Ambulance": 1
+        },
+        "user_25": {
+            "Road Safety": 1
+        },
         "user_26": {
-            "Remote Monitoring": 1
+            "Home Energy": 1
         },
         "user_27": {
             "Remote Monitoring": 1
@@ -353,7 +353,7 @@
             "Structural Health": 1
         },
         "user_29": {
-            "City Surveillance": 1
+            "Connected Ambulance": 1
         }
     },
     "HostUtilizationCap": {
