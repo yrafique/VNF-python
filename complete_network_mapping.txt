@@ -1,0 +1,56 @@
++-------------+--------------+--------------------+-----+--------+---------+
+| Application |     Type     |        Name        | CPU | Memory | Storage |
++-------------+--------------+--------------------+-----+--------+---------+
+| Road Safety |     VNF      |      Firewall      |  2  |   4    |    5    |
+| Road Safety |     VNF      |        VPN         |  1  |   2    |    2    |
+| Road Safety | Microservice |  Safety Protocol   |  1  |   1    |    1    |
+| Road Safety | Microservice | Alert Notification | 0.5 |  0.5   |   0.5   |
++-------------+--------------+--------------------+-----+--------+---------+
++-------------------+--------------+---------------------------+-----+--------+---------+
+|    Application    |     Type     |            Name           | CPU | Memory | Storage |
++-------------------+--------------+---------------------------+-----+--------+---------+
+| City Surveillance |     VNF      |           Proxy           |  4  |   16   |    20   |
+| City Surveillance |     VNF      |        Data Storage       |  2  |   8    |    50   |
+| City Surveillance | Microservice |      Face Recognition     |  3  |   8    |    10   |
+| City Surveillance | Microservice | License Plate Recognition |  2  |   4    |    5    |
++-------------------+--------------+---------------------------+-----+--------+---------+
++-------------------+--------------+--------------------+-----+--------+---------+
+|    Application    |     Type     |        Name        | CPU | Memory | Storage |
++-------------------+--------------+--------------------+-----+--------+---------+
+| Structural Health |     VNF      |       Cache        |  1  |   2    |    5    |
+| Structural Health |     VNF      |   Data Analysis    |  2  |   4    |    10   |
+| Structural Health | Microservice | Vibration Analysis |  1  |   1    |    2    |
+| Structural Health | Microservice |  Health Reporting  |  1  |   1    |    1    |
++-------------------+--------------+--------------------+-----+--------+---------+
++-------------+--------------+------------------+-----+--------+---------+
+| Application |     Type     |       Name       | CPU | Memory | Storage |
++-------------+--------------+------------------+-----+--------+---------+
+| Home Energy |     VNF      |  Energy Router   |  1  |   1    |    1    |
+| Home Energy |     VNF      |  Energy Storage  |  1  |   2    |    2    |
+| Home Energy | Microservice |   HVAC Control   |  1  |   1    |    1    |
+| Home Energy | Microservice | Lighting Control | 0.5 |  0.5   |   0.5   |
++-------------+--------------+------------------+-----+--------+---------+
++-------------+--------------+--------------------+-----+--------+---------+
+| Application |     Type     |        Name        | CPU | Memory | Storage |
++-------------+--------------+--------------------+-----+--------+---------+
+| Smart Grids |     VNF      |   Load Balancer    |  1  |   2    |    2    |
+| Smart Grids |     VNF      |        CDN         |  1  |   1    |    1    |
+| Smart Grids | Microservice | Energy Forecasting |  1  |   1    |    1    |
+| Smart Grids | Microservice |  Fault Detection   | 0.5 |  0.5   |   0.5   |
++-------------+--------------+--------------------+-----+--------+---------+
++---------------------+--------------+------------------------+-----+--------+---------+
+|     Application     |     Type     |          Name          | CPU | Memory | Storage |
++---------------------+--------------+------------------------+-----+--------+---------+
+| Connected Ambulance |     VNF      |         Proxy          |  2  |   4    |    5    |
+| Connected Ambulance |     VNF      |        IDS/IPS         |  1  |   2    |    2    |
+| Connected Ambulance | Microservice | Vital Signs Monitoring |  1  |   1    |    1    |
+| Connected Ambulance | Microservice |   Communication Link   |  1  |   1    |    1    |
++---------------------+--------------+------------------------+-----+--------+---------+
++-------------------+--------------+----------------+-----+--------+---------+
+|    Application    |     Type     |      Name      | CPU | Memory | Storage |
++-------------------+--------------+----------------+-----+--------+---------+
+| Remote Monitoring |     VNF      |     Router     |  1  |   2    |    3    |
+| Remote Monitoring |     VNF      |    Firewall    |  2  |   4    |    5    |
+| Remote Monitoring | Microservice |  Alert System  |  1  |   1    |    1    |
+| Remote Monitoring | Microservice | Remote Control |  1  |   1    |    1    |
++-------------------+--------------+----------------+-----+--------+---------+
