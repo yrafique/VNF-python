@@ -5,11 +5,11 @@
     "latency": "10-100",
     "device_density": "3000",
     "sfc": ["Firewall", "VPN", "Safety Protocol", "Alert Notification"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Firewall", "storage": 5, "memory": 4, "cpu": 2},
       {"name": "VPN", "storage": 2, "memory": 2, "cpu": 1}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Safety Protocol", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Alert Notification", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
     ]
@@ -20,11 +20,11 @@
     "latency": "10",
     "device_density": "60",
     "sfc": ["Proxy", "Data Storage", "Face Recognition", "License Plate Recognition"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Proxy", "storage": 20, "memory": 16, "cpu": 4},
       {"name": "Data Storage", "storage": 50, "memory": 8, "cpu": 2}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Face Recognition", "storage": 10, "memory": 8, "cpu": 3},
       {"name": "License Plate Recognition", "storage": 5, "memory": 4, "cpu": 2}
     ]
@@ -35,11 +35,11 @@
     "latency": "1-20",
     "device_density": ">60000",
     "sfc": ["Cache", "Data Analysis", "Vibration Analysis", "Health Reporting"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Cache", "storage": 5, "memory": 2, "cpu": 1},
       {"name": "Data Analysis", "storage": 10, "memory": 4, "cpu": 2}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Vibration Analysis", "storage": 2, "memory": 1, "cpu": 1},
       {"name": "Health Reporting", "storage": 1, "memory": 1, "cpu": 1}
     ]
@@ -50,11 +50,11 @@
     "latency": "300-200",
     "device_density": "6000",
     "sfc": ["Energy Router", "Energy Storage", "HVAC Control", "Lighting Control"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Energy Router", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Energy Storage", "storage": 2, "memory": 2, "cpu": 1}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "HVAC Control", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Lighting Control", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
     ]
@@ -65,11 +65,11 @@
     "latency": "1-20",
     "device_density": "6000",
     "sfc": ["Load Balancer", "CDN", "Energy Forecasting", "Fault Detection"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Load Balancer", "storage": 2, "memory": 2, "cpu": 1},
       {"name": "CDN", "storage": 1, "memory": 1, "cpu": 1}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Energy Forecasting", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Fault Detection", "storage": 0.5, "memory": 0.5, "cpu": 0.5}
     ]
@@ -80,11 +80,11 @@
     "latency": "10",
     "device_density": "60",
     "sfc": ["Proxy", "IDS/IPS", "Vital Signs Monitoring", "Communication Link"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Proxy", "storage": 5, "memory": 4, "cpu": 2},
       {"name": "IDS/IPS", "storage": 2, "memory": 2, "cpu": 1}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Vital Signs Monitoring", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Communication Link", "storage": 1, "memory": 1, "cpu": 1}
     ]
@@ -95,11 +95,11 @@
     "latency": "250",
     "device_density": "60000",
     "sfc": ["Router", "Firewall", "Alert System", "Remote Control"],
-    "vnfs": [
+    "network_functions": [
       {"name": "Router", "storage": 3, "memory": 2, "cpu": 1},
       {"name": "Firewall", "storage": 5, "memory": 4, "cpu": 2}
     ],
-    "microservices": [
+    "analytics_functions": [
       {"name": "Alert System", "storage": 1, "memory": 1, "cpu": 1},
       {"name": "Remote Control", "storage": 1, "memory": 1, "cpu": 1}
     ]

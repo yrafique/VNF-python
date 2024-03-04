@@ -1,4 +1,4 @@
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 1
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/19/24 21:54:20 Page 1
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -56,7 +56,7 @@ GDXIN   c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\data.gdx
   43      BW(Servers, Servers2, Users, VNFs, VNFs2);
   44   
   45  EQUATIONS
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 2
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/19/24 21:54:20 Page 2
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 C o m p i l a t i o n
 
@@ -94,7 +94,7 @@ C o m p i l a t i o n
   74   
   76  $UNLOAD V L X L BW L
 ****            $140$140 $140
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 3
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/19/24 21:54:20 Page 3
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Error Messages
 
@@ -106,7 +106,7 @@ Error Messages
 495  Load dimensions are different
 
 **** 14 ERROR(S)   0 WARNING(S)
-GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/17/24 20:56:33 Page 4
+GAMS 24.9.1  r63795 Released Aug 30, 2017 WEX-WEI x86 64bit/MS Windows                                                                                                                                                                 02/19/24 21:54:20 Page 4
 G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
 Include File Summary
 
@@ -118,7 +118,7 @@ Include File Summary
      3       75 GDXOUT         1      75  c:\Users\youse\OneDrive\Documents\GitHub\VNF-python\Optimization_output.gdx
 
 
-COMPILATION TIME     =        0.000 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
+COMPILATION TIME     =        0.016 SECONDS      3 MB  24.9.1 r63795 WEX-WEI
 
 
 USER: Mohamad Awad                                   G151015:1146AO-GEN
