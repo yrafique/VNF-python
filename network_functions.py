@@ -1,77 +1,94 @@
-# This is network_functions.py
-# This file contains helper functions for parsing network data from XML and manipulating network structures using NetworkX.
+# network_functions.py
+"""
+This module provides functions for parsing network configurations from XML files and for 
+manipulating and analyzing network structures using NetworkX, a Python library for 
+the creation, manipulation, and study of complex networks.
+"""
 
 import networkx as nx
-import pandas as pd
 import numpy as np
 import math
 from scipy.spatial.distance import euclidean
 import random
 import json
 from prettytable import PrettyTable
-import numpy as np
 import matplotlib.pyplot as plt
 import xml.dom.minidom as dom
-import xml.etree.ElementTree as ET
 from network_classes import *
-from collections import defaultdict
-from lxml import etree
+import logging
 
+import xml.etree.ElementTree as ET
+from network_classes import Node
 
-############ READ XML FUNCTIONS #########
+# Define the namespace used in the XML file
+namespace = {'sndlib': 'http://sndlib.zib.de/network'}
 
-
-
-
-def validate_xml(xml_path):
-    # Attempt to parse the XML file
-    try:
-        tree = ET.parse(xml_path)
-        root = tree.getroot()
-        
-        # Example validation: Check if specific elements/attributes exist
-        nodes_exist = root.find('.//nodes') is not None
-        links_exist = root.find('.//links') is not None
-        
-        if nodes_exist and links_exist:
-            print(f"{xml_path} seems valid based on basic structure checks.")
-        else:
-            print(f"{xml_path} is missing required elements.")
-
-    except ET.ParseError as e:
-        print(f"XML parsing error: {e}")
-
-
-
-
-def read_nodes(nodelist):
+def parse_xml_to_nodes(xml_data):
     """
-    Parses XML node elements into Node class instances.
-
+    Parses an XML string to create Node instances.
+    
     Args:
-        nodelist (xml.dom.minidom.NodeList): List of node elements from XML.
-
+        xml_data (str): XML data as a string.
+    
     Returns:
-        dict: Dictionary of node IDs mapped to Node instances.
+        dict: A dictionary of Node instances with node ID as the key.
     """
     nodes = {}
-    for i, node in enumerate(nodelist):
-        node_id = node.getAttribute("id")
-        x_cor = float(node.getElementsByTagName('x')[0].firstChild.data)
-        y_cor = float(node.getElementsByTagName('y')[0].firstChild.data)
-        nodes[node_id] = Node(node_id, x_cor, y_cor)
+    root = ET.fromstring(xml_data)
+    
+    # Iterate over node elements in the XML and create Node instances
+    for node_elem in root.findall('.//sndlib:node', namespace):
+        node_id = node_elem.get('id')
+        x = float(node_elem.find('.//sndlib:x', namespace).text)
+        y = float(node_elem.find('.//sndlib:y', namespace).text)
+        nodes[node_id] = Node(uid=node_id, x=x, y=y)
+        
     return nodes
 
-def read_links(linklist):
+def parse_xml_to_links(xml_data):
     """
-    Parses XML link elements into Link class instances.
-
+    Parses an XML string to create Link instances.
+    
     Args:
-        linklist (xml.dom.minidom.NodeList): List of link elements from XML.
-
+        xml_data (str): XML data as a string.
+    
     Returns:
-        dict: Dictionary of link IDs mapped to Link instances.
+        dict: A dictionary of Link instances with link ID as the key.
     """
+    links = {}
+    root = ET.fromstring(xml_data)
+    
+    # Iterate over link elements in the XML and create Link instances
+    for link_elem in root.findall('.//sndlib:link', namespace):
+        link_id = link_elem.get('id')
+        source = link_elem.find('.//sndlib:source', namespace).text
+        target = link_elem.find('.//sndlib:target', namespace).text
+        capacity = float(link_elem.find('.//sndlib:capacity', namespace).text)
+        cost = float(link_elem.find('.//sndlib:cost', namespace).text)
+        medium = link_elem.find('.//sndlib:medium', namespace).text if link_elem.find('.//sndlib:medium', namespace) is not None else 'fiber'
+        links[link_id] = Link(uid=link_id, source=source, target=target, capacity=capacity, cost=cost, medium=medium)
+        
+    return links
+
+def read_nodes(nodelist, debug=False):
+    nodes = {}
+    for node in nodelist:
+        node_id = node.getAttribute("id")
+        x = float(node.getElementsByTagName('x')[0].firstChild.data)
+        y = float(node.getElementsByTagName('y')[0].firstChild.data)
+        nodes[node_id] = Node(node_id, x, y)
+        debug_print(f"Processed node: ID={node_id}, x={x}, y={y}", debug)
+    return nodes
+
+# This is a mockup function. Replace with your actual XML parsing logic.
+def read_nodes_from_xml(xml_data):
+    # Parse the XML and create Node objects
+    nodes = {}
+    for node_id, node_info in xml_data.items():  # replace with actual XML parsing logic
+        nodes[node_id] = Node(uid=node_info['id'], x=node_info['x'], y=node_info['y'])
+    return nodes
+
+def read_links(linklist, default_medium='fiber', debug=False):
     links = {}
     for link in linklist:
         link_id = link.getAttribute("id")
@@ -79,19 +96,13 @@ def read_links(linklist):
         target = link.getElementsByTagName("target")[0].firstChild.data
         capacity = float(link.getElementsByTagName("capacity")[0].firstChild.data)
         cost = float(link.getElementsByTagName("cost")[0].firstChild.data)
-        links[link_id] = Link(link_id, source, target, capacity, cost)
+        medium_nodes = link.getElementsByTagName("medium")
+        medium = medium_nodes[0].firstChild.data if medium_nodes else default_medium
+        links[link_id] = Link(link_id, source, target, capacity, cost, medium)
+        debug_print(f"Processed link: ID={link_id}, source={source}, target={target}, medium={medium}", debug)
     return links
 
-def read_demands(demandlist):
-    """
-    Parses XML demand elements into Demand class instances.
-
-    Args:
-        demandlist (xml.dom.minidom.NodeList): List of demand elements from XML.
-
-    Returns:
-        dict: Dictionary of demand IDs mapped to Demand instances.
-    """
+def read_demands(demandlist, debug=False):
     demands = {}
     for demand in demandlist:
         demand_id = demand.getAttribute("id")
@@ -99,503 +110,503 @@ def read_demands(demandlist):
         destination = demand.getElementsByTagName("target")[0].firstChild.data
         demandValue = float(demand.getElementsByTagName("demandValue")[0].firstChild.data)
         demands[demand_id] = Demand(demand_id, source, destination, demandValue)
+        debug_print(f"Processed demand: ID={demand_id}, source={source}, destination={destination}", debug)
     return demands
 
-def read_XMLnetwork(filename):
+# Corrected populate_network function
+
+def populate_network(G, nodes, links, default_medium='fiber', debug=False):
     """
-    Reads network configuration from an XML file and parses nodes, links, and demands.
+    Adds nodes and links to a NetworkX graph from provided dictionaries.
 
     Args:
-        filename (str): Path to the XML file containing network data.
-
-    Returns:
-        tuple: Contains three elements (nodes, links, demands) each represented as dictionaries.
+        G (networkx.Graph): The graph to which nodes and links are added.
+        nodes (dict): A dictionary of nodes where the key is the node ID and 
+                      the value is an instance of the Node class.
+        links (dict): A dictionary of links where the key is the link ID and
+                      the value is an instance of the Link class.
+        default_medium (str, optional): The default communication medium for links.
+                                        Defaults to 'fiber'.
+        debug (bool, optional): Flag to turn on debug information.
+                                Defaults to False.
     """
-    Read_Data = dom.parse(filename)
-    nodes = read_nodes(Read_Data.getElementsByTagName("node"))
-    links = read_links(Read_Data.getElementsByTagName("link"))
-    demands = read_demands(Read_Data.getElementsByTagName("demand"))
-    return nodes, links, demands
+    propagation_speeds = {
+        'fiber': 200, 'ethernet': 200, 'wifi': 300, '5g': 300, 'lora': 300, 'p2p_microwave': 300
+    }
+    
+    # Add nodes to the graph
+    for node_id, node in nodes.items():
+        if not isinstance(node, Node):
+            raise TypeError(f"Expected Node object for node ID {node_id}, but got {type(node)} instead.")
+        G.add_node(node_id, pos=(node.x, node.y), **vars(node))
+        if debug:
+            print(f"Added node: ID={node_id} with position=({node.x}, {node.y})")
 
+    # Add links to the graph
+    for link_id, link in links.items():
+        if not isinstance(link, Link):
+            raise TypeError(f"Expected Link object for link ID {link_id}, but got {type(link)} instead.")
+        source_pos = G.nodes[link.source]['pos']
+        target_pos = G.nodes[link.target]['pos']
 
-############ NETWORKX GRAPH FUNCTIONS #########
+        # Calculate the Euclidean distance for the link
+        distance = math.sqrt((target_pos[0] - source_pos[0]) ** 2 + (target_pos[1] - source_pos[1]) ** 2)
+        
+        # Retrieve medium and calculate latency
+        medium = getattr(link, 'medium', default_medium)
+        speed = propagation_speeds[medium]
+        latency = distance / speed
 
+        # Add the edge to the graph
+        G.add_edge(link.source, link.target, capacity=link.capacity, cost=link.cost, latency=latency, medium=medium)
+        if debug:
+            print(f"Added link: ID={link_id} from {link.source} to {link.target} with medium={medium}")
 
+# NetworkX Graph Functions
 def calculate_distance(x1, y1, x2, y2):
-    """Calculate the Euclidean distance between two points."""
+    """
+    Calculate the Euclidean distance between two points.
+    Args:
+        x1, y1, x2, y2 (float): Coordinates of the two points.
+    Returns:
+        float: Euclidean distance between the two points.
+    """
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
-def populate_network(G, nodes, links, medium='fiber'):
+
+
+
+def draw_network_graph(G, mec_location=None):
     """
-    Populates a NetworkX graph with nodes and links based on provided dictionaries.
-    Calculates and sets the propagation delay for each link based on the specified medium.
-
-    Args:
-        G (networkx.Graph): The graph to populate.
-        nodes (dict): Dictionary of nodes.
-        links (dict): Dictionary of links, which could be instances of Link or dictionaries.
-        medium (str): Default communication medium for the network.
-    """
-    # Define propagation speeds for different media (in km/ms)
-    propagation_speeds = {
-        'fiber': 200,         # Fiber optic
-        'ethernet': 200,      # Copper Ethernet
-        'wifi': 300,          # Wi-Fi
-        '5g': 300,            # 5G
-        'lora': 300,          # LoRa (speed of light, though low data rate)
-        'p2p_microwave': 300  # Point-to-point microwave
-    }
-
-    for node_id, node in nodes.items():
-        G.add_node(node_id, pos=(node.x, node.y))
-
-    for link_id, link in links.items():
-        # Check if link is a dictionary or a Link object and access attributes accordingly
-        if isinstance(link, dict):  # if the link is provided as a dictionary
-            source, target = link['source'], link['target']
-            capacity, cost = link['capacity'], link['cost']
-            link_medium = link.get('medium', medium)  # Use specified medium or default
-        else:  # if the link is a Link object
-            source, target = link.source, link.target
-            capacity, cost = link.capacity, link.cost
-            link_medium = getattr(link, 'medium', medium)  # Use specified medium or default
-        
-        source_pos = G.nodes[source]['pos']
-        target_pos = G.nodes[target]['pos']
-        distance = calculate_distance(*source_pos, *target_pos)  # Unpacking coordinates
-        speed = propagation_speeds.get(link_medium, 200)  # Use medium-specific speed
-        latency = distance / speed  # Calculate latency based on distance and speed
-        
-        # Add the edge with calculated latency and other attributes
-        G.add_edge(source, target, capacity=capacity, cost=cost, latency=latency, medium=link_medium)
-
-
-
-
-def draw_network_graph(G):
-    """
-    Draws the network graph using NetworkX and Matplotlib.
+    Draws the network graph using NetworkX and Matplotlib, highlighting the MEC server.
 
     Args:
         G (networkx.Graph): The graph to draw.
+        mec_location (tuple): The (x, y) coordinates of the MEC server, if present.
     """
+    import matplotlib.pyplot as plt
+
+    # Draw the regular network nodes and edges
     pos = nx.get_node_attributes(G, 'pos')
-    plt.figure(figsize=(10, 8))
-    nx.draw(G, pos, with_labels=True, node_size=700, node_color='skyblue', font_size=10)
+    nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=500, font_size=12)
+
+    # Highlight and label the MEC server distinctly
+    if mec_location:
+        nx.draw_networkx_nodes(G, pos, nodelist=[mec_location], node_size=600, node_color='red')
+        nx.draw_networkx_labels(G, pos, labels={mec_location: 'MEC Server'}, font_color='white')
+
     plt.title('Network Topology')
     plt.show()
 
+
 def print_link_attributes(G):
     """
-    Prints the attributes of each link in the network graph, including the latency
-    which represents the propagation delay.
-
+    Prints the attributes of each link in the network graph.
     Args:
         G (networkx.Graph): The graph containing the links.
     """
-    link_table = PrettyTable()
-    link_table.field_names = ["Edge", "Capacity (Mbps)", "Cost", "Propagation Delay (ms)", "Medium"]
+    link_table = PrettyTable(["Edge", "Capacity (Mbps)", "Cost", "Propagation Delay (ms)", "Medium"])
     for (u, v, attrs) in G.edges(data=True):
-        capacity = attrs['capacity']
-        cost = attrs['cost']
-        delay = attrs.get('latency', 'N/A')
-        medium = attrs.get('medium', 'Not defined')
-        link_table.add_row([f"{u} to {v}", capacity, cost, delay, medium])
+        link_table.add_row([f"{u} to {v}", attrs['capacity'], attrs['cost'], attrs.get('latency', 'N/A'), attrs.get('medium', 'N/A')])
     print("Graph Edges and their Attributes:")
     print(link_table)
 
 def print_node_attributes(G):
     """
     Prints the attributes of each node in the network graph.
-
     Args:
         G (networkx.Graph): The graph containing the nodes.
     """
-    node_table = PrettyTable()
-    node_table.field_names = ["Node", "x-coordinate", "y-coordinate", "Medium"]
+    node_table = PrettyTable(["Node", "x-coordinate", "y-coordinate", "Medium"])
     for node, attrs in G.nodes(data=True):
         x, y = attrs['pos']
-        medium = attrs.get('medium', 'Not defined')
-        node_table.add_row([node, x, y, medium])
+        node_table.add_row([node, x, y, attrs.get('medium', 'N/A')])
     print("Graph Nodes and their Attributes:")
     print(node_table)
 
-def measure_network_stats(G):
-    # Initialize PrettyTable
-    table = PrettyTable()
-    table.field_names = ["Metric", "Value", "Typical Range", "Interpretation"]
-    
-    # Network Density
-    density = nx.density(G)
-    table.add_row(["Density", f"{density:.4f}", "0 to 1", 
-                   "Higher values indicate a more connected network."])
-
-    # Average Shortest Path Length
-    if nx.is_connected(G):
-        avg_shortest_path_length = nx.average_shortest_path_length(G)
-    else:
-        avg_shortest_path_length = np.mean([nx.average_shortest_path_length(G.subgraph(c)) for c in nx.connected_components(G) if len(c) > 1])
-    table.add_row(["Average Shortest Path Length", f"{avg_shortest_path_length:.4f}", "Varies", 
-                   "Smaller values suggest higher efficiency in information flow."])
-
-    # Average Clustering Coefficient
-    avg_clustering_coefficient = nx.average_clustering(G)
-    table.add_row(["Average Clustering Coefficient", f"{avg_clustering_coefficient:.4f}", "0 to 1", 
-                   "High values indicate tight-knit groups or cliques."])
-
-    # Assortativity
-    assortativity = nx.degree_assortativity_coefficient(G)
-    table.add_row(["Assortativity", f"{assortativity:.4f}", "-1 to 1", 
-                   "Positive values: nodes connect to similar-degree nodes. Negative: high-degree nodes connect to low-degree ones."])
-
-    # Network Modularity
-    communities = list(nx.algorithms.community.label_propagation_communities(G))
-    modularity = nx.algorithms.community.modularity(G, communities)
-    table.add_row(["Network Modularity", f"{modularity:.4f}", "-0.5 to 1", 
-                   "Higher values indicate well-defined community structure."])
-
-    # Network Efficiency
-    efficiency = nx.global_efficiency(G)
-    table.add_row(["Network Efficiency", f"{efficiency:.4f}", "0 to 1", 
-                   "Higher values indicate efficient communication across the network."])
-
-    # Print the table
-    print("Network Statistics and Metrics:")
-    print(table)
-
-    # PageRank
-    pagerank_values = nx.pagerank(G)
-    pagerank_table = PrettyTable()
-    pagerank_table.field_names = ["Node", "PageRank", "Interpretation"]
-    for node, rank in sorted(pagerank_values.items(), key=lambda item: item[1], reverse=True):
-        pagerank_table.add_row([node, f"{rank:.4f}", 
-                                "Higher values indicate more important or influential nodes."])
-    
-    print("\nPageRank Weights:")
-    print(pagerank_table)
-
-
-################## USER FUNCTIONS ###################
+# User and Application Functions
 def find_nearest_ap(G, user_pos):
     """
-    Find the nearest access point to a given user position.
-
+    Finds the nearest access point to a given user position in the network.
     Args:
         G (networkx.Graph): The graph representing the network.
         user_pos (tuple): The (x, y) coordinates of the user.
-
     Returns:
-        tuple: The ID and position (x, y) of the nearest access point, or (None, None) if no AP found.
+        tuple: The ID and position (x, y) of the nearest access point. Returns (None, None) if no AP found.
     """
     min_distance = float('inf')
     nearest_ap = None
     nearest_pos = None
-
-    for ap, pos in nx.get_node_attributes(G, 'pos').items():
-        distance = euclidean(user_pos, pos)
+    for ap, data in G.nodes(data=True):
+        ap_pos = data['pos']
+        distance = euclidean(user_pos, ap_pos)
         if distance < min_distance:
             min_distance = distance
             nearest_ap = ap
-            nearest_pos = pos
-
+            nearest_pos = ap_pos
     return nearest_ap, nearest_pos
+
+
 
 
 def create_users(G, NoOfUsers, node_range=50):
     """
-    Create a specified number of user nodes, each associated with the nearest access point.
+    Creates a specified number of user nodes, each associated with the nearest access point.
+    Args:
+        G (networkx.Graph): The graph representing the network infrastructure.
+        NoOfUsers (int): The number of user nodes to create.
+        node_range (float): The maximum distance from network nodes within which users can be placed.
+    Returns:
+        tuple: A graph containing user nodes, a list of User instances, and a list of user connections.
     """
     G_users = nx.Graph()
     user_connections = []
     users = []
-
     user_count = 0
+
     while user_count < NoOfUsers:
-        for node in G.nodes:
-            if "Cloud" not in node:  # Skip cloud nodes
-                x_cor, y_cor = G.nodes[node]['pos']
-                randx = random.uniform(x_cor - node_range, x_cor + node_range)
-                randy = random.uniform(y_cor - node_range, y_cor + node_range)
+        for node in G.nodes(data=True):
+            if node[1].get('type') != 'cloud':  # Assuming 'type' is used to differentiate nodes, skip cloud nodes
+                node_pos = node[1]['pos']
+                randx = random.uniform(node_pos[0] - node_range, node_pos[0] + node_range)
+                randy = random.uniform(node_pos[1] - node_range, node_pos[1] + node_range)
                 user_pos = (randx, randy)
                 nearest_ap, _ = find_nearest_ap(G, user_pos)
+
                 if nearest_ap:
                     user_id = f"user_{user_count}"
-                    user_instance = User(user_id, (randx, randy), nearest_ap)
-                    users.append(user_instance)
-                    G_users.add_node(user_id, pos=user_pos, user=user_instance)
-                    #G_users.add_node(user_id, user=user_instance)  # Store the User instance
-                    user_connections.append(((randx, randy), G.nodes[nearest_ap]['pos']))
+                    user = User(user_id, user_pos, nearest_ap)  # Ensure associated_ap is passed here
+                    users.append(user)
+                    G_users.add_node(user_id, pos=user_pos, user=user)
+                    user_connections.append((user_pos, G.nodes[nearest_ap]['pos']))
                     user_count += 1
+
                 if user_count >= NoOfUsers:
                     break
+
     return G_users, users, user_connections
 
 
 
+def print_user_details(users):
+    """
+    Prints details of all user instances.
+    Args:
+        users (list): List of User instances.
+    """
+    user_table = PrettyTable(["User ID", "Position", "Associated AP"])
+    for user in users:
+        user_table.add_row([user.id, user.pos, user.associated_ap])
+    print("User Details:")
+    print(user_table)
 
-
-################### SERVER FUNCTIONS ####################
-
-
-# def associate_edge_devices(G, edge_devices_filename, cloud_server_cost, edge_server_cost):
-#     """
-#     Updates the attributes of the edge devices in the graph based on JSON data.
-
-#     Args:
-#         G (networkx.Graph): The graph representing the network.
-#         edge_devices_filename (str): The file path to the JSON data for edge devices.
-#         cloud_server_cost (float): The cost of the cloud server.
-#         edge_server_cost (float): The cost of the edge server.
-#     """
-#     with open(edge_devices_filename, "r") as file:
-#         edge_devices_data = json.load(file)
-
-#     for node in G.nodes():
-#         if "cloud" in node.lower():
-#             server = Server(
-#                 "Huawei FusionServer Pro 2298 V5", 34253, "x86", 
-#                 "75.6GHz", "3TB", "450TB", "Edge_Device_FusionServerPro2298",
-#                 cloud_server_cost
-#             )
-#         else:
-#             server = Server(
-#                 "Cisco HyperFlex HX220c Edge M5", 16408, "x86", 
-#                 "34.8GHz", "1TB", "5TB", "Edge_Device_Cisco_HX220",
-#                 edge_server_cost
-#             )
-        
-#         # Update graph node attributes using the server object attributes
-#         G.nodes[node].update(vars(server))
-
-
+# Server Functions
 def associate_edge_devices(G, edge_devices_filename, cloud_server_cost, edge_server_cost):
-    with open(edge_devices_filename, "r") as file:
+    """
+    Updates the attributes of edge devices in the graph based on JSON data.
+    Args:
+        G (networkx.Graph): The graph representing the network.
+        edge_devices_filename (str): Path to the JSON file containing edge device data.
+        cloud_server_cost (float): Cost associated with cloud servers.
+        edge_server_cost (float): Cost associated with edge servers.
+    """
+    with open(edge_devices_filename, 'r') as file:
         edge_devices_data = json.load(file)
-
-    for node in G.nodes():
-        if "cloud" in node.lower():
-            server = Server(
-                name="Huawei FusionServer Pro 2298 V5",
-                cpu="75.6GHz",
-                memory="3TB",
-                storage="450TB",
-                source="Edge_Device_FusionServerPro2298",
-                server_cost=cloud_server_cost
+    for node_id in G.nodes():
+        if "cloud" in node_id.lower():  # Identify cloud nodes
+            server_data = edge_devices_data.get('cloud', {})
+            server_instance = Server(
+                server_data.get('name', 'Unknown'), server_data.get('formFactor', None),
+                server_data.get('architecture', 'Unknown'), server_data.get('cpu', 'Unknown'),
+                server_data.get('memory', 'Unknown'), server_data.get('storage', 'Unknown'),
+                'cloud', cloud_server_cost
             )
-        else:
-            server = Server(
-                name="Cisco HyperFlex HX220c Edge M5",
-                cpu="34.8GHz",
-                memory="1TB",
-                storage="5TB",
-                source="Edge_Device_Cisco_HX220",
-                server_cost=edge_server_cost
+        else:  # Edge nodes
+            server_data = edge_devices_data.get('edge', {})
+            server_instance = Server(
+                server_data.get('name', 'Unknown'), server_data.get('formFactor', None),
+                server_data.get('architecture', 'Unknown'), server_data.get('cpu', 'Unknown'),
+                server_data.get('memory', 'Unknown'), server_data.get('storage', 'Unknown'),
+                'edge', edge_server_cost
             )
-        
-        # Update graph node attributes using the server object attributes
-        G.nodes[node].update(vars(server))
-
-
-
-
+        G.nodes[node_id]['server'] = server_instance
 
 def print_edge_device_attributes(G):
     """
-    Prints the attributes of all nodes in the graph, intended for edge devices, 
-    using PrettyTable for formatting in a single table.
-
+    Prints attributes of edge devices in the graph.
     Args:
         G (networkx.Graph): The graph representing the network with edge devices.
     """
-    # Initialize PrettyTable and set the field names
-    table = PrettyTable()
-    # Assuming all nodes have the same attributes, use the first node to determine field names
-    first_node_attrs = list(G.nodes(data=True))[0][1] if G.nodes else {}
-    field_names = ['Node'] + [attr for attr in first_node_attrs]  # Add 'Node' as the first field name
-    table.field_names = field_names
-
-    # Fill the table with nodes' data
-    for node, attrs in G.nodes(data=True):
-        row = [node] + [attrs.get(attr, 'N/A') for attr in first_node_attrs]  # 'N/A' for missing attributes
-        table.add_row(row)
-
-    print(table)  # Print the table with all nodes and their attributes
-
-
-
-def associate_user_devices(G_users, traffic_json_path):
-    print("Starting application association process...")
-
-    # Load traffic data
-    with open(traffic_json_path, "r") as file:
-        traffic_data = json.load(file)["trafficStatistics"]
-    print(f"Loaded {len(traffic_data)} traffic statistics.")
-
-    # Assign application data to users
-    for user_id in G_users.nodes:
-        user_data = G_users.nodes[user_id]
-        user = user_data.get('user')  # Ensure this is a User instance
-
-        if user:  # Check if the user instance exists
-            print(f"Assigning application to user: {user_id}")
-
-            # Choose a random traffic statistic to assign to the user
-            random_stat = random.choice(traffic_data)
-            print(f"Selected application for {user_id}: {random_stat['application']}")
-
-            # Compute average values if bandwidth and latency are lists
-            avg_bandwidth = np.mean(random_stat["bandwidth"]) if isinstance(random_stat["bandwidth"], list) else random_stat["bandwidth"]
-            avg_latency = np.mean(random_stat["latency"]) if isinstance(random_stat["latency"], list) else random_stat["latency"]
-
-            # Update the user's data with the chosen application and its attributes
-            application = Application(
-                name=random_stat['application'],
-                bandwidth=avg_bandwidth,
-                latency=avg_latency,
-                device_density=random_stat['deviceDensity'],
-                source=random_stat['source'],
-                sfc=[]  # Assuming this is filled elsewhere or not needed
-            )
-            user.assign_application(application)  # Assign the application to the user
-            print(f"Assigned {application.name} to user {user_id} with bandwidth {avg_bandwidth} and latency {avg_latency}.")
-        else:
-            print(f"No user instance found for node: {user_id}")
-
-    print("Application association process completed.")
-
-
-
-
-
-def print_user_device_attributes(G_users):
-    table = PrettyTable()
-    table.field_names = ["User", "Application", "Bandwidth (Mbps)", "Latency (ms)", "Device Density (/km^2)", "Source"]
-    for user_id, data in G_users.nodes(data=True):
-        user = data.get('user')  # Access the User instance
-        if user and user.application:  # Check if user and user's application exist
-            app = user.application  # Access the Application instance
-            table.add_row([
-                user_id, app.name, app.bandwidth, app.latency, 
-                app.device_density, app.source
+    edge_table = PrettyTable(["Node", "Server Name", "Form Factor", "Architecture", "CPU", "Memory", "Storage", "Cost"])
+    for node, data in G.nodes(data=True):
+        server = data.get('server')
+        if server:
+            edge_table.add_row([
+                node, server.name, server.formFactor, server.architecture, 
+                server.cpu, server.memory, server.storage, server.server_cost
             ])
-        else:
-            table.add_row([user_id, "None", "N/A", "N/A", "N/A", "N/A"])
-    print(table)
+    print("Edge Device Attributes:")
+    print(edge_table)
 
-
-
-
+# Application and Container Association Functions
 def associate_app_with_containers(G_users, containers_json_path):
     """
-    Assigns each application and its users to Containers, parsing from JSON file.
+    Associates applications with containers and users based on container data.
+    Args:
+        G_users (networkx.Graph): The graph representing user devices.
+        containers_json_path (str): Path to the JSON file containing container data.
+    Returns:
+        dict: Dictionary of Application instances keyed by application name.
     """
-    print("Starting container association process...")
-    with open(containers_json_path, 'r') as f:
-        containers_data = json.load(f)
-
-    app_objects = {}  # Dictionary to store application objects
-    app_to_users = defaultdict(list)  # Dictionary to map applications to users
-
-    # Process each application in the container data
-    for app_data in containers_data:
+    with open(containers_json_path, 'r') as file:
+        container_data = json.load(file)
+    
+    app_objects = {}  # Stores application instances
+    for app_data in container_data:
+        # Create Application instances from container data
         app_name = app_data['application']
-        # Check and add network and analytics functions
-        cnfs = app_data.get('network_functions', []) + app_data.get('analytics_functions', [])
-        
-        # Initialize or update the Application instance
         if app_name not in app_objects:
             app_objects[app_name] = Application(
-                name=app_name,
-                bandwidth=app_data.get('bandwidth', 0),
-                latency=app_data.get('latency', 0),
-                device_density=app_data.get('device_density', 0),
-                source="DefinedSource",  # Update as necessary
-                sfc=app_data.get('sfc', [])
+                name=app_name, bandwidth=app_data.get('bandwidth', 0),
+                latency=app_data.get('latency', 0), device_density=app_data.get('device_density', 0),
+                source='DefinedSource', sfc=app_data.get('sfc', [])
             )
-
-        # Create and add CNFs for the application
-        for cnf_data in cnfs:
-            cnf = CNF(
-                name=cnf_data['name'],
-                cpu=float(cnf_data['cpu']),
-                memory=float(cnf_data['memory']),
-                storage=float(cnf_data['storage']),
-                type='CNF'
+        # Add CNFs to Application instance
+        for cnf_data in app_data.get('cnfs', []):
+            cnf_instance = CNF(
+                name=cnf_data['name'], cpu=cnf_data['cpu'],
+                memory=cnf_data['memory'], storage=cnf_data['storage']
             )
-            app_objects[app_name].add_cnf(cnf)
-
-    # Associate users from G_users to their applications
-    for user_id, user_data in G_users.nodes(data=True):
-        user = user_data['user']  # Extract the User instance
-        if user and user.application:  # Check if user has an assigned application
-            app_name = user.application.name
+            app_objects[app_name].add_cnf(cnf_instance)
+    
+    # Associate users with applications
+    for user_id, data in G_users.nodes(data=True):
+        user_instance = data.get('user')
+        if user_instance and user_instance.application:
+            app_name = user_instance.application.name
             if app_name in app_objects:
-                app_objects[app_name].add_user(user)
-                app_to_users[app_name].append(user_id)
-
-    print("Container association process completed.")
-    return dict(app_to_users), app_objects
+                app_objects[app_name].add_user(user_instance)
+    
+    return app_objects
 
 def print_applications_and_resources(app_objects):
     """
-    Prints detailed information for each application and its associated resources.
+    Prints out the resources and users associated with each application.
+    Args:
+        app_objects (dict): Dictionary of Application instances keyed by application name.
     """
-    for app_name, app in app_objects.items():
-        print(f"Application Name: {app_name}")
-        print(f"Associated Users: {', '.join([user.id for user in app.users])}")
-        print(f"Service Function Chain: {', '.join(app.sfc)}")
-        
-        # Initialize PrettyTable for CNFs
-        cnf_table = PrettyTable()
-        cnf_table.field_names = ["CNF Name", "CPU (GHz)", "Memory (GB)", "Storage (GB)"]
-        for cnf in app.cnfs:  # Follow the order defined in sfc
-            cnf_table.add_row([cnf.name, cnf.cpu, cnf.memory, cnf.storage])
+    for app_name, app_instance in app_objects.items():
+        print(f"\nApplication: {app_name}")
+        print(f"Bandwidth: {app_instance.bandwidth} Mbps, Latency: {app_instance.latency} ms")
+        print("Users:", ', '.join([user.id for user in app_instance.users]))
+        print("Containers:")
+        for cnf in app_instance.cnfs:
+            print(f"  {cnf.name}: CPU {cnf.cpu} GHz, Memory {cnf.memory} GB, Storage {cnf.storage} GB")
 
-        print(cnf_table)
-        print("---------------------------------------------------")
+# Network Efficiency Functions
+def calculate_network_efficiency(G):
+    """
+    Calculates and prints the overall efficiency of the network.
+    Args:
+        G (networkx.Graph): The network graph.
+    """
+    efficiency = nx.global_efficiency(G)
+    print(f"\nNetwork Efficiency: {efficiency:.4f}")
+    # The global efficiency is the average inverse shortest path length in the network
 
-def print_all_applications_and_resources(app_objects):
-    # Initialize a PrettyTable instance for the applications
-    app_table = PrettyTable()
-    app_table.field_names = ["Application Name", "Associated Users", "Service Function Chain", "CNF Details"]
+def evaluate_network_performance(G, app_objects):
+    """
+    Evaluates the network performance based on application requirements and network configuration.
+    Args:
+        G (networkx.Graph): The network graph.
+        app_objects (dict): Dictionary of Application instances keyed by application name.
+    """
+    print("\nNetwork Performance Evaluation:")
+    for app_name, app_instance in app_objects.items():
+        print(f"Application: {app_name}")
+        satisfied_users = 0
+        for user in app_instance.users:
+            path_length = nx.shortest_path_length(G, source=user.associated_ap, target='cloud_server')  # Example target
+            if path_length <= app_instance.latency:  # Just an illustrative comparison
+                satisfied_users += 1
+        print(f"  Satisfied Users: {satisfied_users}/{len(app_instance.users)}")
+
+
+def find_edge_servers(G):
+    """
+    Finds all edge servers in the graph based on a 'type' attribute.
+
+    Args:
+        G (networkx.Graph): The graph to search within.
+
+    Returns:
+        list: A list of node IDs that are edge servers.
+    """
+    edge_servers = [node for node, attrs in G.nodes(data=True) if attrs.get('type') == 'edge_server']
+    return edge_servers
+
+
+
+
+
+def calculate_geographic_midpoint(locations):
+    """
+    Calculate the geographic midpoint for a list of (x, y) coordinates.
+    Args:
+        locations (list): List of (x, y) coordinates.
+    Returns:
+        tuple: The (x, y) coordinates of the geographic midpoint.
+    """
+    x_coords, y_coords = zip(*locations)
+    return (np.mean(x_coords), np.mean(y_coords))
+
+def set_mec_server(G, edge_servers):
+    """
+    Sets the MEC (Mobile Edge Computing) server in the network graph based on the geographic midpoint of edge servers.
     
-    # Iterate through each application and its details
-    for app_name, app in app_objects.items():
-        # Convert list of users to string
-        users_str = ', '.join(user.id for user in app.users)
+    Args:
+        G (networkx.Graph): The network graph.
+        edge_servers (list): A list of nodes representing edge servers in the network.
         
-        # Convert list of CNFs to string
-        cnf_details = "\n".join(f"{cnf.name}: CPU={cnf.cpu} GHz, Memory={cnf.memory} GB, Storage={cnf.storage} GB" for cnf in app.cnfs)
-        
-        # Convert list of CNFs in the service function chain to string
-        sfc_str = ' -> '.join(cnf.name for cnf in app.cnfs)
-        
-        # Add the application details to the table
-        app_table.add_row([app_name, users_str, sfc_str, cnf_details])
+    Returns:
+        tuple: The (x, y) coordinates of the MEC server.
+    """
+    if not edge_servers:
+        raise ValueError("No edge servers provided to determine the MEC server location.")
     
-    print(app_table)
+    # Calculate the geographic midpoint based on edge servers' positions
+    x_coords, y_coords = zip(*[G.nodes[edge_server]['pos'] for edge_server in edge_servers])
+    mid_x, mid_y = np.mean(x_coords), np.mean(y_coords)
+    
+    # Add the MEC server to the graph with this midpoint position
+    G.add_node('mec_server', pos=(mid_x, mid_y), type='MEC_server')
+    
+    # Return the position for further use
+    return mid_x, mid_y
 
-def deploy_applications_randomly(app_to_users, servers, G, G_users):
-    # Assuming servers is a list of Server objects
-    for app_name, users in app_to_users.items():
-        server = random.choice(servers)  # Select a random server
-        application = Application(name=app_name, bandwidth=0, latency=0, device_density=0, source="",
-                                  sfc=[], total_cpu=1, total_memory=1, total_storage=1)  # Simplified for example
-        if server.deploy_application(application):
-            print(f"Deployed {app_name} to {server.name}")
-        else:
-            print(f"Failed to deploy {app_name} to {server.name}")
+def set_mec_server_based_on_all_nodes(G):
+    """
+    Sets the MEC server in the graph based on the geographic midpoint of all nodes if no specific edge servers are identified.
+    
+    Args:
+        G (networkx.Graph): The graph to update.
+    
+    Returns:
+        tuple: The (x, y) coordinates of the newly set MEC server.
+    """
+    if G.number_of_nodes() == 0:
+        raise ValueError("The graph contains no nodes.")
+    
+    # Calculate the geographic midpoint based on all nodes' positions
+    x_coords, y_coords = zip(*[data['pos'] for node, data in G.nodes(data=True)])
+    mid_x, mid_y = np.mean(x_coords), np.mean(y_coords)
+    
+    # Add the MEC server to the graph with this midpoint position
+    G.add_node('mec_server', pos=(mid_x, mid_y), type='MEC_server')
+    
+    return mid_x, mid_y
 
-    # Update: Use the NetworkX graph to manage the network structure and routing
 
-# Example method to add or update users with required attributes
-def update_users_with_attributes(G_users):
-    for user_id in G_users:
-        # Assuming functions or logic to determine these values exist
-        associated_ap = determine_associated_ap(user_id)
-        bandwidth = determine_bandwidth(user_id)
-        
-        # Now, update each user node with these attributes
-        nx.set_node_attributes(G_users, {user_id: {'associated_ap': associated_ap, 'bandwidth': bandwidth}})
 
+def report_network_health(G):
+    """
+    Reports the health and statistics of the network.
+    Args:
+        G (networkx.Graph): The graph representing the network.
+    """
+    health_table = PrettyTable()
+    health_table.field_names = ["Metric", "Value"]
+
+    # Network connectivity (True if the graph is connected, False otherwise)
+    health_table.add_row(["Connected", nx.is_connected(G)])
+
+    # Network density
+    health_table.add_row(["Density", nx.density(G)])
+
+    # Average clustering coefficient
+    health_table.add_row(["Average Clustering", nx.average_clustering(G)])
+
+    # Network diameter (Only if the network is connected)
+    if nx.is_connected(G):
+        health_table.add_row(["Diameter", nx.diameter(G)])
+
+    # Average shortest path length (Only if the network is connected)
+    if nx.is_connected(G):
+        health_table.add_row(["Avg Shortest Path Length", nx.average_shortest_path_length(G)])
+
+    # Edge server details
+    if 'mec_server' in G.nodes:
+        mec_pos = G.nodes['mec_server']['pos']
+        health_table.add_row(["MEC Server Position", mec_pos])
+    else:
+        health_table.add_row(["MEC Server Position", "Not set"])
+
+    print(health_table)
+
+def measure_network_stats(G):
+    """
+    Measure various statistics of the network.
+    Args:
+        G (networkx.Graph): The graph representing the network.
+    """
+    stats_table = PrettyTable()
+    stats_table.field_names = ["Metric", "Value"]
+    
+    # Calculate PageRank
+    pageranks = nx.pagerank(G)
+    # Sort nodes by PageRank
+    sorted_pageranks = sorted(pageranks.items(), key=lambda x: x[1], reverse=True)
+
+    # Network complexity as number of edges
+    stats_table.add_row(["Complexity (edges)", G.number_of_edges()])
+
+    # Average shortest path (if network is connected)
+    if nx.is_connected(G):
+        stats_table.add_row(["Avg. Shortest Path Length", nx.average_shortest_path_length(G)])
+    
+    # Add more network statistics as needed
+
+    print(stats_table)
+
+    # Print top nodes by PageRank
+    print("Top nodes by PageRank:")
+    for node, rank in sorted_pageranks[:5]:  # Show top 5
+        print(f"Node {node} has PageRank {rank:.4f}")
+
+
+def draw_network_and_users(G, G_users, user_connections):
+    """
+    Draws the network graph including users and their nearest access points.
+    
+    Args:
+        G (networkx.Graph): The graph representing the network infrastructure.
+        G_users (networkx.Graph): The graph representing user devices.
+        user_connections (list): A list of tuples representing connections between users and APs.
+    """
+    import matplotlib.pyplot as plt
+    # Draw the main network nodes and edges
+    pos = nx.get_node_attributes(G, 'pos')
+    nx.draw(G, pos, with_labels=True, node_size=700, node_color='skyblue')
+
+    # Draw edge servers distinctly if they are specified
+    edge_servers = find_edge_servers(G)
+    if edge_servers:
+        nx.draw_networkx_nodes(G, pos, nodelist=edge_servers, node_size=800, node_color='green', label='Edge Server')
+
+    # Draw MEC server distinctly if it exists
+    if 'mec_server' in G.nodes:
+        mec_pos = { 'mec_server': G.nodes['mec_server']['pos'] }
+        nx.draw_networkx_nodes(G, mec_pos, nodelist=['mec_server'], node_size=1000, node_color='red', label='MEC Server')
+
+    # Draw users
+    pos_users = nx.get_node_attributes(G_users, 'pos')
+    nx.draw_networkx_nodes(G_users, pos_users, node_size=300, node_color='red', node_shape='s', label='Users')
+
+    # Draw connections between users and the network
+    for user_pos, ap_pos in user_connections:
+        plt.plot([user_pos[0], ap_pos[0]], [user_pos[1], ap_pos[1]], 'green', linestyle='dotted', linewidth=2.5)
+
+    plt.legend()
+    plt.title('Network and User Topology')
+    plt.show()
