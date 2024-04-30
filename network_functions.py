@@ -17,6 +17,59 @@ import xml.dom.minidom as dom
 from network_classes import *
 import logging
 
+import xml.etree.ElementTree as ET
+from network_classes import Node
+
+# Define the namespace used in the XML file
+namespace = {'sndlib': 'http://sndlib.zib.de/network'}
+
+def parse_xml_to_nodes(xml_data):
+    """
+    Parses an XML string to create Node instances.
+    
+    Args:
+        xml_data (str): XML data as a string.
+    
+    Returns:
+        dict: A dictionary of Node instances with node ID as the key.
+    """
+    nodes = {}
+    root = ET.fromstring(xml_data)
+    
+    # Iterate over node elements in the XML and create Node instances
+    for node_elem in root.findall('.//sndlib:node', namespace):
+        node_id = node_elem.get('id')
+        x = float(node_elem.find('.//sndlib:x', namespace).text)
+        y = float(node_elem.find('.//sndlib:y', namespace).text)
+        nodes[node_id] = Node(uid=node_id, x=x, y=y)
+        
+    return nodes
+
+def parse_xml_to_links(xml_data):
+    """
+    Parses an XML string to create Link instances.
+    
+    Args:
+        xml_data (str): XML data as a string.
+    
+    Returns:
+        dict: A dictionary of Link instances with link ID as the key.
+    """
+    links = {}
+    root = ET.fromstring(xml_data)
+    
+    # Iterate over link elements in the XML and create Link instances
+    for link_elem in root.findall('.//sndlib:link', namespace):
+        link_id = link_elem.get('id')
+        source = link_elem.find('.//sndlib:source', namespace).text
+        target = link_elem.find('.//sndlib:target', namespace).text
+        capacity = float(link_elem.find('.//sndlib:capacity', namespace).text)
+        cost = float(link_elem.find('.//sndlib:cost', namespace).text)
+        medium = link_elem.find('.//sndlib:medium', namespace).text if link_elem.find('.//sndlib:medium', namespace) is not None else 'fiber'
+        links[link_id] = Link(uid=link_id, source=source, target=target, capacity=capacity, cost=cost, medium=medium)
+        
+    return links
+
 def read_nodes(nodelist, debug=False):
     nodes = {}
     for node in nodelist:
@@ -25,6 +78,14 @@ def read_nodes(nodelist, debug=False):
         y = float(node.getElementsByTagName('y')[0].firstChild.data)
         nodes[node_id] = Node(node_id, x, y)
         debug_print(f"Processed node: ID={node_id}, x={x}, y={y}", debug)
+    return nodes
+
+# This is a mockup function. Replace with your actual XML parsing logic.
+def read_nodes_from_xml(xml_data):
+    # Parse the XML and create Node objects
+    nodes = {}
+    for node_id, node_info in xml_data.items():  # replace with actual XML parsing logic
+        nodes[node_id] = Node(uid=node_info['id'], x=node_info['x'], y=node_info['y'])
     return nodes
 
 def read_links(linklist, default_medium='fiber', debug=False):
@@ -52,24 +113,54 @@ def read_demands(demandlist, debug=False):
         debug_print(f"Processed demand: ID={demand_id}, source={source}, destination={destination}", debug)
     return demands
 
-def populate_network(G, filename, default_medium='fiber', debug=False):
-    Node, links, _ = read_XMLnetwork(filename, debug)
+# Corrected populate_network function
+
+def populate_network(G, nodes, links, default_medium='fiber', debug=False):
+    """
+    Adds nodes and links to a NetworkX graph from provided dictionaries.
+
+    Args:
+        G (networkx.Graph): The graph to which nodes and links are added.
+        nodes (dict): A dictionary of nodes where the key is the node ID and 
+                      the value is an instance of the Node class.
+        links (dict): A dictionary of links where the key is the link ID and
+                      the value is an instance of the Link class.
+        default_medium (str, optional): The default communication medium for links.
+                                        Defaults to 'fiber'.
+        debug (bool, optional): Flag to turn on debug information.
+                                Defaults to False.
+    """
     propagation_speeds = {
         'fiber': 200, 'ethernet': 200, 'wifi': 300, '5g': 300, 'lora': 300, 'p2p_microwave': 300
     }
+    
+    # Add nodes to the graph
     for node_id, node in nodes.items():
+        if not isinstance(node, Node):
+            raise TypeError(f"Expected Node object for node ID {node_id}, but got {type(node)} instead.")
         G.add_node(node_id, pos=(node.x, node.y), **vars(node))
-        debug_print(f"Added node: ID={node_id} with position=({node.x}, {node.y})", debug)
+        if debug:
+            print(f"Added node: ID={node_id} with position=({node.x}, {node.y})")
+
+    # Add links to the graph
     for link_id, link in links.items():
+        if not isinstance(link, Link):
+            raise TypeError(f"Expected Link object for link ID {link_id}, but got {type(link)} instead.")
         source_pos = G.nodes[link.source]['pos']
         target_pos = G.nodes[link.target]['pos']
-        distance = calculate_distance(*source_pos, *target_pos)
+
+        # Calculate the Euclidean distance for the link
+        distance = math.sqrt((target_pos[0] - source_pos[0]) ** 2 + (target_pos[1] - source_pos[1]) ** 2)
+        
+        # Retrieve medium and calculate latency
         medium = getattr(link, 'medium', default_medium)
         speed = propagation_speeds[medium]
         latency = distance / speed
-        G.add_edge(link.source, link.target, capacity=link.capacity, cost=link.cost, latency=latency, medium=medium)
-        debug_print(f"Added link: ID={link_id} from {link.source} to {link.target} with medium={medium}", debug)
 
+        # Add the edge to the graph
+        G.add_edge(link.source, link.target, capacity=link.capacity, cost=link.cost, latency=latency, medium=medium)
+        if debug:
+            print(f"Added link: ID={link_id} from {link.source} to {link.target} with medium={medium}")
 
 # NetworkX Graph Functions
 def calculate_distance(x1, y1, x2, y2):
