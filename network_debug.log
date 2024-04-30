@@ -31,3 +31,10 @@
 2024-03-06 23:40:25,736:DEBUG:Using fontManager instance from C:\Users\youse\.matplotlib\fontlist-v330.json
 2024-03-06 23:40:26,024:DEBUG:Loaded backend module://ipykernel.pylab.backend_inline version unknown.
 2024-03-06 23:40:26,032:DEBUG:Loaded backend module://ipykernel.pylab.backend_inline version unknown.
+2024-03-17 00:39:19,494:DEBUG:matplotlib data path: /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/matplotlib/mpl-data
+2024-03-17 00:39:19,497:DEBUG:CONFIGDIR=/Users/yrafique/.matplotlib
+2024-03-17 00:39:19,497:DEBUG:interactive is False
+2024-03-17 00:39:19,497:DEBUG:platform is darwin
+2024-03-17 00:39:19,527:DEBUG:CACHEDIR=/Users/yrafique/.matplotlib
+2024-03-17 00:39:19,528:DEBUG:Using fontManager instance from /Users/yrafique/.matplotlib/fontlist-v330.json
+2024-03-17 00:53:25,035:ERROR:An error occurred while populating the network: Expected Node object for node ID 1, but got <class 'dict'> instead.
