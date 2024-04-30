@@ -1,0 +1,132 @@
+{
+    "edgeDevices": [
+      {
+        "name": "Raspberry Pi 4 Model B",
+        "formFactor": 53,
+        "architecture": "AArch64",
+        "cpu": "4x1.50GHz",
+        "memory": "8GB",
+        "storage": "16GB",
+        "source": "Edge_Device_RPi4"
+      },
+      {
+        "name": "Rigardo Cascade 500 Gateway",
+        "formFactor": 484,
+        "architecture": "ARMv7",
+        "cpu": "1x800MHz",
+        "memory": "512MB",
+        "storage": "8GB",
+        "source": "Edge_Device_Cascade500"
+      },
+      {
+        "name": "NEON 201B JNX AI Camera",
+        "formFactor": 638,
+        "architecture": "AArch64",
+        "cpu": "6x2.00GHz",
+        "memory": "8GB",
+        "storage": "16GB",
+        "source": "Edge_Device_NEON_AI_Cam"
+      },
+      {
+        "name": "NVIDIA Jetson AGX Xavier",
+        "formFactor": 717,
+        "architecture": "AArch64",
+        "cpu": "8x2.26GHz",
+        "memory": "32GB",
+        "storage": "32GB",
+        "source": "Edge_Device_Nvidia_Jetson_AGX"
+      },
+      {
+        "name": "Dell Edge Gateway 3002",
+        "formFactor": 797,
+        "architecture": "x86",
+        "cpu": "1x1.33GHz",
+        "memory": "2GB",
+        "storage": "32GB",
+        "source": "Edge_Device_Dell-edgegw-3002"
+      },
+      {
+        "name": "Huawei AR502H Router",
+        "formFactor": 879,
+        "architecture": "AArch64",
+        "cpu": "1x1.00GHz",
+        "memory": "2GB",
+        "storage": "256GB",
+        "source": "Edge_Device_Huawei_AR502H_Router"
+      },
+      {
+        "name": "Cisco IC3000 Gateway",
+        "formFactor": 2330,
+        "architecture": "x86",
+        "cpu": "4x1.25GHz",
+        "memory": "8GB",
+        "storage": "100GB",
+        "source": "Edge_Device_Cisco-IC3400"
+      },
+      {
+        "name": "Cisco IR829 Router",
+        "formFactor": 2400,
+        "architecture": "x86",
+        "cpu": "2x1.25GHz",
+        "memory": "2GB",
+        "storage": "8GB",
+        "source": "Edge_Device_Cisco-IR829"
+      },
+      {
+        "name": "NEXCOM CPS 200 Edge Gateway",
+        "formFactor": 2855,
+        "architecture": "x86",
+        "cpu": "4x2.00GHz",
+        "memory": "4GB",
+        "storage": "50GB",
+        "source": "Edge_Devices_NEXCOM_CPS200"
+        },
+        {
+        "name": "Dell Edge Gateway 5000",
+        "formFactor": 3166,
+        "architecture": "x86",
+        "cpu": "2x1.33GHz",
+        "memory": "8GB",
+        "storage": "512GB",
+        "source": "Edge_Device_Dell-edgegw-5100"
+        }
+        ],
+        "edgeServers": [
+        {
+        "name": "Cisco HyperFlex HX220c Edge M5",
+        "formFactor": 16408,
+        "architecture": "x86",
+        "cpu": "up to 28x2.90GHz",
+        "memory": "up to 3TB",
+        "storage": "up to 30TB",
+        "source": "Edge_Device_Cisco_HX220"
+        },
+        {
+        "name": "Nokia AirFrame Open Edge Server",
+        "formFactor": 16417,
+        "architecture": "x86",
+        "cpu": "up to 28x2.20GHz",
+        "memory": "up to 128GB",
+        "storage": "up to 7.68GB",
+        "source": "Edge_Device_Nokia-Airframe"
+        },
+        {
+        "name": "HPE SimpliVity 380 Gen10 H",
+        "formFactor": 26417,
+        "architecture": "x86",
+        "cpu": "up to 28x2.90GHz",
+        "memory": "up to 3TB",
+        "storage": "up to 25TB",
+        "source": "Edge_Device_HPE_SimpliVity380"
+        },
+        {
+        "name": "Huawei FusionServer Pro 2298 V5",
+        "formFactor": 34253,
+        "architecture": "x86",
+        "cpu": "up to 28x2.70GHz",
+        "memory": "up to 3TB",
+        "storage": "up to 450TB",
+        "source": "Edge_Device_FusionServerPro2298"
+        }
+        ]
+}
